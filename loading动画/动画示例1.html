@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{margin:0;padding: 0;}
+
+        @keyframes moveRed{
+            0%{
+                transform:translate(0, 0);
+            }
+            25%{
+                transform:translate(50px, 0);
+            }
+            50%{
+                transform:translate(50px, 50px);
+            }
+            75%{
+                transform:translate(0, 50px);
+            }
+            100%{
+                transform:translate(0, 0);
+            }
+        }
+        @keyframes moveGreen{
+            0%{
+                transform:translate(0, 0);
+            }
+            25%{
+                transform:translate(0, 50px);
+            }
+            50%{
+                transform:translate(-50px, 50px);
+            }
+            75%{
+                transform:translate(-50px, 0);
+            }
+            100%{
+                transform:translate(0, 0);
+            }
+        }
+        @keyframes moveGray{
+            0%{
+                transform:translate(0, 0);
+            }
+            25%{
+                transform:translate(-50px, 0);
+            }
+            50%{
+                transform:translate(-50px, -50px);
+            }
+            75%{
+                transform:translate(-0, -50px);
+            }
+            100%{
+                transform:translate(0, 0);
+            }
+        }
+        @keyframes moveOrange{
+            0%{
+                transform:translate(0, 0);
+            }
+            25%{
+                transform:translate(0, -50px);
+            }
+            50%{
+                transform:translate(50px, -50px);
+            }
+            75%{
+                transform:translate(50px, 0);
+            }
+            100%{
+                transform:translate(0, 0);
+            }
+        }
+        .wrap{
+            width:100px;height: 100px;
+            margin:20% auto;
+        }
+        
+        
+        .wrap>div{
+            width:35px;height: 35px;float: left;
+            border-radius: 50%;
+            margin:7.5px
+        }
+        .circle-green{
+            background-color: #19A68C;
+            animation:moveGreen 2s infinite;
+        }
+        .circle-red{
+            animation:moveRed 2s infinite;
+            background-color: #F63D3A;
+        }
+        .circle-orange{
+            background-color: #FDA543;
+            animation:moveOrange 2s infinite;
+        }
+        .circle-gray{
+            background-color: #193B48;
+            animation:moveGray 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="circle-red"></div>
+        <div class="circle-green"></div>
+        <div class="circle-orange"></div>
+        <div class="circle-gray"></div>
+    </div>
+</body>
+</html>

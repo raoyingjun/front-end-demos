@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{margin:0 auto;padding:0}
+        h2{text-align: center;}
+        #canvas{border:1px solid gray; margin: 0 auto; width:600px; height:300px; display: block;}
+        p{text-align:center;}
+    </style>
+</head>
+<body>
+    <h2>画布</h2>
+    <canvas id="canvas" width="600" height="300px" ></canvas>
+    
+    <p>
+        <input type="radio" name="color" value="black" checked>黑色
+        <input type="radio" name="color" value="red">红色
+        <input type="radio" name="color" value="blue">蓝色
+        <input type="button" id="clear" value="清空">
+    </p>
+    <script>
+        var canvas = document.querySelector('#canvas');
+        var ctx = canvas.getContext('2d');
+        document.querySelector('#clear').onclick = function () {
+            ctx.clearRect(0,0,canvas.offsetWidth,canvas.offsetHeight);
+        }
+        canvas.onmousedown = function (e) {
+            ctx.strokeStyle = document.querySelector(":checked").value;
+            ctx.beginPath();
+            this.onmousemove = function (e) {
+                console.log(e)
+                ctx.lineTo(e.clientX - this.offsetLeft,e.clientY - this.offsetTop);
+                ctx.stroke();
+                
+            }
+            canvas.onmouseup = function () {
+                ctx.closePath();
+                this.onmousemove = null;
+            }
+        }
+    </script>
+</body>
+</html>

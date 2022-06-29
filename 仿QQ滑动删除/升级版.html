@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0
+        }
+
+        .wrap {
+            width: 100%;
+            height: 100%;
+            background-color: gray;
+            position: absolute
+        }
+
+        .item {
+            width: 100%;
+            line-height: 15vw;
+            background-color: #fff;
+            margin: 5px 0;
+            position: relative;
+        }
+
+        .delete {
+            width: 25%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            background-color: lightseagreen;
+            text-align: center;
+            right: -25%
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="item">第一项</div>
+        <div class="item">第二项</div>
+        <div class="item">第三项</div>
+        <div class="item">第四项</div>
+        <div class="item">第五项</div>
+        <div class="item">第六项</div>
+    </div>
+    <script src="./jquery-3.4.1.min.js"></script>
+
+    <script>
+        var $box = $('#box');
+        var startX = null ;
+        $('.item').on('touchstart', function (e) {
+            startX = e.touches[0].clientX;
+            let $this = $(this);
+            $this.on('touchmove', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                let $delete = $this.find('.delete');
+                
+                let curX = e.touches[0].clientX;
+                if (curX < startX) {
+                    if (!$delete[0]) {
+                        let deleteHTML = '<div class="delete">删除</div>';
+                        $this.append(deleteHTML);
+                    } else {
+                        let width = $delete[0].offsetWidth;
+                        if (parseInt($delete.css('right')) >= 0) {
+                            return;
+                        }
+                        if (startX - curX - width > 0) {
+                            return;
+                        }
+                        $delete.css('right', startX - curX - width);
+                    }
+                } else if (curX > startX) {
+                    if ($delete[0]) {
+                        let width = $delete[0].offsetWidth;
+                        if (curX - startX > width) {
+                            return;
+                        }
+                        $delete.clearQueue().css('right', (curX - startX) * -1);
+                    }       
+                }
+                $this.on('touchend', function (e) {
+                    if ($this.find('.delete')[0]) {
+                        let $delete = $this.find('.delete');
+                        let right = parseInt($delete.css('right'));
+                        if ( $delete[0].offsetWidth + right >= $delete[0].offsetWidth / 2) {
+                            $delete.clearQueue().animate({right: 0});
+                        } else {
+                            $delete.clearQueue().animate({right: "-25%"});
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

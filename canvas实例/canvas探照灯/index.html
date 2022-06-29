@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {margin: 0; padding: 0;}
+        canvas {display: block; margin: 30px auto; border: 1px solid gray}
+    </style>
+</head>
+<body>
+    <canvas id="c" width="800" height="800"></canvas>
+    <script>
+        var c = null;
+        var ctx = null;
+        var searchLight = null;
+        function init () {
+            initData();
+            setTimer();
+        }
+        function renderText () {
+            ctx.font = "bold 40px Arial";
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = 'red';
+            ctx.fillText('TEST FOR CANVAS CLIP METHOD', c.width / 2, c.height * 1 / 4 - c.height * 1 / 4 / 2);
+            ctx.fillStyle = 'green';
+            ctx.fillText('TEST FOR CANVAS CLIP METHOD', c.width / 2, c.height * 2 / 4 - c.height * 1 / 4 / 2);
+            ctx.fillStyle = 'blue';
+            ctx.fillText('TEST FOR CANVAS CLIP METHOD', c.width / 2, c.height * 3 / 4 - c.height * 1 / 4 / 2);
+            ctx.fillStyle = 'purple';
+            ctx.fillText('TEST FOR CANVAS CLIP METHOD', c.width / 2, c.height - c.height * 1 / 4 / 2);
+        }
+        function initData () {
+            c = document.querySelector('#c');
+            ctx = c.getContext('2d');
+            searchLight = {
+                r: 150,
+                x: c.width / 2,
+                y: c.height / 2,
+                vx: 4,
+                vy: 2
+            }
+        }
+        function render () {
+            ctx.save();
+            ctx.clearRect(0, 0, c.width, c.height);
+            ctx.fillRect(0, 0, c.width, c.height);
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(searchLight.x, searchLight.y, searchLight.r, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.clip();
+            renderText();
+            ctx.restore();
+        }
+        function update () {
+            searchLight.x += searchLight.vx;
+            searchLight.y += searchLight.vy;
+            if (searchLight.x - searchLight.r <= 0) {
+                searchLight.x = searchLight.r
+                searchLight.vx *= -1
+            }
+            if (searchLight.x + searchLight.r >= c.width) {
+                searchLight.x = c.width - searchLight.r
+                searchLight.vx *= -1
+            }
+            if (searchLight.y - searchLight.r <= 0) {
+                searchLight.y = searchLight.r
+                searchLight.vy *= -1
+            }
+            if (searchLight.y + searchLight.r >= c.height) {
+                searchLight.y = c.height - searchLight.r
+                searchLight.vy *= -1
+            }
+        }
+        function setTimer () {
+            setInterval(() => {
+                render();
+                update();
+            }, 17);
+        }
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>

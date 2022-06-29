@@ -1,0 +1,202 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+
+        :root {
+            --wrap-size: 500px;
+            --point-size: 20px
+        }
+
+        @keyframes anim {
+            from {
+                transform: scale(1);
+                opacity: 1;
+            }
+            to {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
+        .wrap {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: var(--wrap-size);
+            height: var(--wrap-size);
+            margin-left: calc(var(--wrap-size) / -2);
+            margin-top: calc(var(--wrap-size) / -2);
+        }
+
+        .point {
+            float: left;
+            transition: all 200ms;
+            width: var(--point-size);
+            height: var(--point-size);
+            user-select: none;
+            border-radius: 50%;
+            /*
+             * 100% - var(--point-size) * 3) / 4
+             * (400 - 20 * 3) / 4
+             * 每行有n个格子则格子之间的水平间隙（margin-left）为分成n+1份
+             * (总宽度-每行格子宽度*每行格子数=每行多出来的空间)/(每行格子数 + 1 = 分成的间隙数) = 每行每个格子间的间隙（margin-left）
+             */
+            margin-left: calc((100% - var(--point-size) * 3) / 4);
+            margin-top: calc((100% - var(--point-size) * 3) / 4);
+            background-color: #c9c9c9;
+        }
+
+        .canvas {
+            position: absolute;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .active {
+            background-color: #1aaf1a;
+            transform: scale(1.1);
+        }
+
+        .active.cur::after {
+            content: '';
+            display: block;
+            width: var(--point-size);
+            height: var(--point-size);
+            border-radius: 50%;
+            background-color: #1aaf1a;
+            animation: anim 2s infinite;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap" id="wrap">
+    <canvas id="canvas" class="canvas"></canvas>
+    <div class="point"></div>
+    <div class="point"></div>
+    <div class="point"></div>
+    <div class="point"></div>
+    <div class="point"></div>
+    <div class="point"></div>
+    <div class="point"></div>
+    <div class="point"></div>
+    <div class="point"></div>
+    <script>
+        const wrap = document.getElementById('wrap')
+        const canvas = document.getElementById('canvas')
+        const ctx = canvas.getContext('2d')
+        const points = document.getElementsByClassName('point')
+        const passingPoints = [] // 经过的所有坐标点
+        const POINT_SIZE = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--point-size'))
+        const LINE_WIDTH = 2
+        const LINE_COLOR = '#1aaf1a'
+        canvas.width = wrap.offsetWidth
+        canvas.height = wrap.offsetHeight
+
+        bindDataToPoint()
+        initCanvas()
+        function initCanvas() {
+            canvas.width = wrap.offsetWidth
+            canvas.height = wrap.offsetHeight
+            ctx.strokeStyle = LINE_COLOR
+            ctx.lineWidth = LINE_WIDTH
+        }
+
+        function getPointCenterPosition(point) {
+            return {
+                x: point.offsetLeft + POINT_SIZE / 2,
+                y: point.offsetTop + POINT_SIZE / 2
+            }
+        }
+
+        function bindDataToPoint() {
+            for (let i = 0, len = points.length; i < len; i++) {
+                const point = points[i]
+                point.position = getPointCenterPosition(point)
+            }
+        }
+
+        function restore() {
+            for (let i = 0, len = points.length; i < len; i++) {
+                const point = points[i]
+                activePoint(point, false)
+            }
+            passingPoints.splice(0)
+            clearCanvas()
+        }
+
+        function activePoint(point, isActive) {
+            if (isActive) {
+                point.classList.add('active')
+            } else {
+                point.classList.remove('active')
+            }
+        }
+
+        function addAnimToCurPoint() {
+            const len = passingPoints.length
+            if (len >= 1) {
+                passingPoints[passingPoints.length - 1].classList.add('cur')
+            }
+            if (len >= 2) {
+                passingPoints[passingPoints.length - 2].classList.remove('cur')
+            }
+
+        }
+
+        function isPoint(element) {
+            return element.classList.contains('point')
+        }
+
+        function isActive(element) {
+            return element.classList.contains('active')
+        }
+
+        document.onmousedown = function (e) {
+            if (isPoint(e.target) && !isActive(e.target)) {
+                activePoint(e.target, true)
+                passingPoints.push(e.target)
+                addAnimToCurPoint()
+                document.onmousemove = function (e) {
+                    if (isPoint(e.target) && !isActive(e.target)) {
+                        activePoint(e.target, true)
+                        passingPoints.push(e.target)
+                        addAnimToCurPoint()
+                    }
+                    drawLines(e.clientX - wrap.offsetLeft, e.clientY - wrap.offsetTop)
+                }
+                document.onmouseup = function (e) {
+                    restore()
+                    document.onmousemove = null
+                    document.onmouseup = null
+                }
+            }
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+        }
+
+        function drawLines(x, y) {
+            clearCanvas()
+            ctx.beginPath()
+            for (let i = 0, len = passingPoints.length; i < len; i++) {
+                const passingPoint = passingPoints[i]
+                ctx.lineTo(passingPoint.position.x, passingPoint.position.y)
+            }
+            ctx.lineTo(x, y)
+            ctx.stroke()
+        }
+    </script>
+</div>
+</body>
+</html>

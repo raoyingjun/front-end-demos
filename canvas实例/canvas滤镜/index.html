@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .wrap {
+            text-align: center;
+            width: 100%;
+        }
+
+        canvas {
+            border: 1px solid gray;
+            margin: 50px;
+        }
+        div:not(.wrap) {
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <canvas width="400" height="300" id="a"></canvas>
+        <canvas width="400" height="300" id="b"></canvas>
+        <div>
+            <button onclick="greyFilter()">灰度滤镜</button>
+            <button onclick="blackAndWhiteFilter()">黑白滤镜</button>
+            <button onclick="reverseFilter()">反转滤镜</button>
+            <button onclick="blurFilter()">模糊滤镜</button>
+            <button onclick="mosaicFilter()">马赛克滤镜</button>
+        </div>
+        <div>
+            <input type="file" id="file" />
+        </div>
+    </div>
+    <script>
+        var file = document.getElementById('file');
+        var ca = document.getElementById('a');
+        var ctxA = a.getContext('2d');
+        var cb = document.getElementById('b');
+        var ctxB = b.getContext('2d');
+        var image = new Image();
+        file.addEventListener('change', function () {
+            if (!this.files.length) {
+                return;
+            }
+            loadImg(URL.createObjectURL(this.files[0]));
+        })
+        function loadImg (src) {
+            image.onload = function () {
+                ctxA.drawImage(this, 0, 0, ca.width, ca.height);
+            }
+            image.src = src;
+        }
+        function filter() {
+            var imageData = ctxA.getImageData(0, 0, ca.width, ca.height);
+            var pixelData = imageData.data;
+            for (var i = 0; i < ca.width * ca.height; i++) {
+                pixelData[4 * i + 0] = 0; // r
+                pixelData[4 * i + 1] = 0;// g
+                pixelData[4 * i + 2] = 0;// b
+                pixelData[4 * i + 3] = 1;// a
+            }
+            ctxB.putImageData(imageData, 0, 0, 0, 0, cb.width, cb.height);
+        }
+        function greyFilter() {
+            var imageData = ctxA.getImageData(0, 0, ca.width, ca.height);
+            var pixelData = imageData.data;
+            for (var i = 0; i < ca.width * ca.height; i++) {
+                var r = pixelData[4 * i + 0];
+                var g =pixelData[4 * i + 1]
+                var b =pixelData[4 * i + 2];
+                var grey = r * 0.3 + g * 0.5 + b * 0.11;
+                pixelData[4 * i + 0] = grey;
+                pixelData[4 * i + 1] = grey;
+                pixelData[4 * i + 2] = grey;
+            }
+            ctxB.putImageData(imageData, 0, 0, 0, 0, cb.width, cb.height);
+        }
+        function blackAndWhiteFilter() {
+            var imageData = ctxA.getImageData(0, 0, ca.width, ca.height);
+            var pixelData = imageData.data;
+            for (var i = 0; i < ca.width * ca.height; i++) {
+                var whiteOrBlack;
+                var r = pixelData[4 * i + 0];
+                var g =pixelData[4 * i + 1]
+                var b =pixelData[4 * i + 2];
+                var grey = r * 0.3 + g * 0.5 + b * 0.11;
+                if (grey > 255 / 2) {
+                    whiteOrBlack = 255
+                } else {
+                    whiteOrBlack = 0;
+                }
+                pixelData[4 * i + 0] = whiteOrBlack;
+                pixelData[4 * i + 1] = whiteOrBlack;
+                pixelData[4 * i + 2] = whiteOrBlack;
+            }
+            ctxB.putImageData(imageData, 0, 0, 0, 0, cb.width, cb.height);
+        }
+        function reverseFilter() {
+            var imageData = ctxA.getImageData(0, 0, ca.width, ca.height);
+            var pixelData = imageData.data;
+            for (var i = 0; i < ca.width * ca.height; i++) {
+                var r = pixelData[4 * i + 0];
+                var g =pixelData[4 * i + 1]
+                var b =pixelData[4 * i + 2];
+                pixelData[4 * i + 0] = 255 - r;
+                pixelData[4 * i + 1] = 255 - g;
+                pixelData[4 * i + 2] = 255 - b;
+            }
+            ctxB.putImageData(imageData, 0, 0, 0, 0, cb.width, cb.height);
+        }
+        function blurFilter() {
+            var blurR = 2;
+            var area = (2 * blurR + 1) * (2 * blurR + 1);
+            var imageData = ctxA.getImageData(0, 0, ca.width, ca.height);
+            var pixelData = imageData.data;
+            var dirtyData = Object.assign([], pixelData);
+            for (var i = blurR; i < ca.height - blurR; i++) {
+                for (var j = blurR; j < ca.width - blurR; j++) {
+                    var totalR = 0, totalG = 0, totalB = 0;
+                    for (var dx = -blurR; dx <= blurR; dx++) {
+                        for (var dy = -blurR; dy <= blurR; dy++) {
+                            var x = i + dx;
+                            var y = j + dy;
+                            var tempP = x * ca.width + y;
+                            totalR += pixelData[ 4 * tempP + 0];
+                            totalG += pixelData[ 4 * tempP + 1];
+                            totalB += pixelData[ 4 * tempP + 2];
+                        }
+                    }
+                    var p = i * ca.width + j;
+                    dirtyData[ 4 * p + 0] = totalR / area;
+                    dirtyData[ 4 * p + 1] = totalG / area;
+                    dirtyData[ 4 * p + 2] = totalB / area;
+                }
+            }
+            for (var i = blurR; i < ca.height - blurR; i++) {
+                for (var j = blurR; j < ca.width - blurR; j++) {
+                    var p = i * ca.width + j;
+                    pixelData[ 4 * p + 0] = dirtyData[ 4 * p + 0];
+                    pixelData[ 4 * p + 1] = dirtyData[ 4 * p + 1];
+                    pixelData[ 4 * p + 2] = dirtyData[ 4 * p + 2];
+                }
+            }
+            ctxB.putImageData(imageData, 0, 0, 0, 0, cb.width, cb.height);
+        }
+        function mosaicFilter() {
+            var mosaicSize = 10;
+            var area = mosaicSize * mosaicSize;
+            var imageData = ctxA.getImageData(0, 0, ca.width, ca.height);
+            var pixelData = imageData.data;
+            var dirtyData = Object.assign([], pixelData);
+            for (var i = 0; i < ca.height; i += mosaicSize) {
+                for (var j = 0; j < ca.width; j += mosaicSize) {
+                    var totalR = 0, totalG = 0, totalB = 0;
+                    for (var dx = 0; dx < mosaicSize; dx++) {
+                        for (var dy = 0; dy < mosaicSize; dy++) {
+                            var x = i + dx;
+                            var y = j + dy;
+                            var tempP = x * ca.width + y;
+                            totalR += pixelData[ 4 * tempP + 0];
+                            totalG += pixelData[ 4 * tempP + 1];
+                            totalB += pixelData[ 4 * tempP + 2];
+                        }
+                    }
+                    var avgR = totalR / area, avgG = totalG / area, avgB = totalB / area;
+                    for (var dx = 0; dx < mosaicSize; dx++) {
+                        for (var dy = 0; dy < mosaicSize; dy++) {
+                            var x = i + dx;
+                            var y = j + dy;
+                            var tempP = x * ca.width + y;
+                            pixelData[ 4 * tempP + 0] = avgR;
+                            pixelData[ 4 * tempP + 1] = avgG;
+                            pixelData[ 4 * tempP + 2] = avgB;
+                        }
+                    }
+                }
+            }
+            ctxB.putImageData(imageData, 0, 0, 0, 0, cb.width, cb.height);
+        }
+    </script>
+</body>
+</html>

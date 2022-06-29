@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {margin: 0; padding: 0;}
+        canvas {
+            display: block; 
+            border: 1px solid gray; 
+            margin: 30px auto;
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="c" width="800" height="600"></canvas>
+    <input type="checkbox" name="开启拖动" id="draggable">开启拖动
+    <button id="btn">是否允许拖动</button>
+    <script>
+        var draggable = document.querySelector('#draggable');
+        var btn = document.querySelector('#btn');
+        var c = document.querySelector('#c');
+        var ctx = c.getContext('2d');
+        var img = new Image();
+        var isMouseDown = false;
+        var ImgOffsetLeftOfCanvas = 100, ImgOffsetTopOfCanvas = 100; // img相对于canvas的左/上偏移值
+        var pointOffsetLeftOfImg, pointOffsetTopOfImg; // 鼠标所在的位置相对于img的左/上偏移值
+        btn.addEventListener('click', function () {
+            console.log(draggable.checked);
+        })
+        window.onload = function () {
+            loadImg('./pic.png');
+        }
+        function loadImg (src) {
+            img.onload = function () {
+                ctx.drawImage(this, ImgOffsetLeftOfCanvas, ImgOffsetTopOfCanvas)
+            }
+            img.src = src;
+        }
+        c.addEventListener('mousedown', function (e) {
+            ctx.beginPath();
+            ctx.rect(ImgOffsetLeftOfCanvas, ImgOffsetTopOfCanvas, img.width, img.height);
+            var x = e.clientX - this.offsetLeft,
+                y = e.clientY - this.offsetTop;
+            if (ctx.isPointInPath(x, y)) {
+                isMouseDown = true;
+                pointOffsetLeftOfImg = x - ImgOffsetLeftOfCanvas;
+                pointOffsetTopOfImg = y - ImgOffsetTopOfCanvas;
+                console.log(pointOffsetLeftOfImg, pointOffsetTopOfImg);
+            }
+        });
+        c.addEventListener('mousemove', function (e) {
+            if (isMouseDown) {
+                var x = e.clientX - this.offsetLeft,
+                    y = e.clientY - this.offsetTop;
+                ctx.clearRect(0, 0, c.width, c.height);
+                ctx.drawImage(img, x - pointOffsetLeftOfImg, y - pointOffsetTopOfImg, img.width, img.height);
+            }
+        });
+        c.addEventListener('mouseup', function (e) {
+            if (isMouseDown) {
+                var x = e.clientX - this.offsetLeft,
+                    y = e.clientY - this.offsetTop;
+                ImgOffsetLeftOfCanvas = x - pointOffsetLeftOfImg;
+                ImgOffsetTopOfCanvas = y - pointOffsetTopOfImg;
+            }
+            isMouseDown = false;
+        });
+        c.addEventListener('mouseout', function (e) {
+            if (isMouseDown) {
+                var x = e.clientX - this.offsetLeft,
+                    y = e.clientY - this.offsetTop;
+                ImgOffsetLeftOfCanvas = x - pointOffsetLeftOfImg;
+                ImgOffsetTopOfCanvas = y - pointOffsetTopOfImg;
+            }
+            isMouseDown = false;
+        });
+    </script>
+</body>
+</html>

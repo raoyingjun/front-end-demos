@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {margin: 0; padding: 0;}
+        canvas {
+            display: block; 
+            border: 1px solid gray; 
+            margin: 30px auto;
+            margin-bottom: 0;
+        }
+        .cursor-zoom-in { 
+            cursor: zoom-in;
+        }
+        .cursor-move {
+            cursor: move;
+        }
+        div {
+            margin: 20px auto;
+            width: 300px;
+        }
+        input {
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="c" width="800" height="600" class="cursor-zoom-in"></canvas>
+    <div>
+        <input type="file" id="file">
+    </div>
+    <div>
+        <input type="radio" name="radio"id="drag"><label for="drag">拖拽</label>
+        <input type="radio" name="radio" id="scale" checked><label for="scale">放大镜</label>
+    </div>
+    <div>
+        <label>图片缩放率</label>
+        <input type="range" value="1" min="0.5" max="3" id="slider" step="0.01">
+        <span></span>
+    </div>
+    <div>
+        <label>放大镜倍率</label>
+        <input type="range" value="1.5" min="1" max="3" id="magnifier-scale" step="0.01">
+        <span></span>
+    </div>
+    <div>
+        <label>放大镜半径</label>
+        <input type="range" value="100" min="50" max="150" id="magnifier-radius" step="1">
+        <span></span>
+    </div>
+    <script>
+        var c = document.querySelector('#c');
+        var slider = document.querySelector('#slider');
+        var magnifierScale = document.querySelector('#magnifier-scale');
+        var magnifierRadius = document.querySelector('#magnifier-radius');
+        var file = document.querySelector('#file');
+        var ctx = c.getContext('2d');
+        var img = new Image();
+        var isMouseDown = false;
+        var imgOffsetLeftOfCanvas, imgOffsetTopOfCanvas; // img相对于canvas的左/上偏移值
+        var pointOffsetLeftOfImg, pointOffsetTopOfImg; // 鼠标所在的位置相对于img的左/上偏移值aw
+        var lastSliderValue = Number(slider.value); // 上一次slider的值（用来判断是放大还是缩小）
+        file.addEventListener('change', function (e) {
+            var types = ['image/jpg', 'image/jpeg', 'image/png'];
+            if (types.indexOf(this.files[0].type) === -1) {
+                alert('只支持 jpg, jpeg, png 格式的图片');
+                return;
+            }
+            var url = URL.createObjectURL(this.files[0]);
+            loadImg(url);
+        });
+        slider.addEventListener('input', function (e) {
+            var curValue = Number(this.value);
+            if (curValue > lastSliderValue) { // 放大
+                imgOffsetLeftOfCanvas -= (curValue * img.width - lastSliderValue * img.width) / 2;
+                imgOffsetTopOfCanvas -= (curValue * img.height - lastSliderValue * img.height) / 2;
+            } else if (curValue < lastSliderValue){ // 缩小
+                imgOffsetLeftOfCanvas += (lastSliderValue * img.width - curValue * img.width) / 2;
+                imgOffsetTopOfCanvas += (lastSliderValue * img.height - curValue * img.height) / 2;
+            }
+            clear();
+            drawImageByScale();
+            drawWaterMark();
+            showMsg(this, this.value);
+            lastSliderValue = curValue;
+        });
+        magnifierScale.addEventListener('input', function (e) {
+            updateMagnifierPosition();
+            showMsg(this, this.value);
+        });
+        magnifierRadius.addEventListener('input', function (e) {
+            updateMagnifierPosition();
+            showMsg(this, this.value);
+        });
+        window.addEventListener('load', function (e) {
+            showMsgs();
+            drawWaterMark();
+        });
+        c.addEventListener('mousemove', function (e) {
+            if (isMouseDown) {
+                var boundingOffset = getBoundingOfWindow(this);
+                var x = e.clientX - boundingOffset.left,
+                    y = e.clientY - boundingOffset.top;
+                if (getCheckedBySelector('#scale')) {
+                    showMagnifier(x, y);
+                } else {
+                    clear();
+                    imgOffsetLeftOfCanvas = x - pointOffsetLeftOfImg;
+                    imgOffsetTopOfCanvas = y - pointOffsetTopOfImg;
+                    moveImg(x, y);
+                }
+            }
+        });
+        c.addEventListener('mousedown', function (e) {
+            var boundingOffset = getBoundingOfWindow(this);
+            var x = e.clientX - boundingOffset.left,
+                y = e.clientY - boundingOffset.top;
+            isMouseDown = true;
+            if (getCheckedBySelector('#scale')) {
+                showMagnifier(x, y)
+            } else {
+                if (!checkPointPosition(x, y)) {
+                    isMouseDown = false;
+                }
+            }
+        });
+        c.addEventListener('mouseup', function (e) {
+            isMouseDown = false;
+            if (getCheckedBySelector('#scale')) {
+                hideMagnifier();
+            } else {
+                clear();
+                drawImageByScale();
+                drawWaterMark();
+            }
+        });
+        c.addEventListener('mouseleave', function (e) {
+            isMouseDown = false;
+            if (getCheckedBySelector('#scale')) {
+                hideMagnifier();
+            } else {
+                clear();
+                drawImageByScale();
+                drawWaterMark();
+            }
+        });
+        magnifierScale.addEventListener('mouseup', function (e) {
+                hideMagnifier();
+        });
+        magnifierRadius.addEventListener('mouseup', function (e) {
+                hideMagnifier();
+        });
+        addRadioListener();
+        function updateMagnifierPosition () {
+            var scaleValue = Number(slider.value);
+            var imgW = img.width,
+                imgH = img.height;
+            var scaledImgW = imgW * scaleValue,
+                scaledImgH = imgH * scaleValue;
+            showMagnifier(imgOffsetLeftOfCanvas + scaledImgW / 2, imgOffsetTopOfCanvas + scaledImgH / 2);
+        }
+        function getBoundingOfWindow(element) {
+            return element.getBoundingClientRect();
+        }
+        function isOutOfCanvasBounding (x, y) {
+            var isInBounding = false;
+            var scaleValue = Number(slider.value);
+            var imgW = img.width,
+                imgH = img.height;
+            var scaledImgW = imgW * scaleValue,
+                scaledImgH = imgH * scaleValue;
+            if (x - pointOffsetLeftOfImg + scaledImgW >= c.width) {
+                imgOffsetLeftOfCanvas = c.width - scaledImgW;
+                isInBounding = true;
+            }
+            if (y - pointOffsetTopOfImg + scaledImgH >= c.height) {
+                imgOffsetTopOfCanvas = c.height - scaledImgH;
+                isInBounding = true;
+            }
+            if (x -pointOffsetLeftOfImg <= 0) {
+                imgOffsetLeftOfCanvas = 0;
+                isInBounding = true;
+            }
+            if (y - pointOffsetTopOfImg <=  0) {
+                imgOffsetTopOfCanvas = 0;
+                isInBounding = true;
+            }
+            return isInBounding;
+        }
+        
+        function checkPointPosition (x, y) {
+            var scaleValue = Number(slider.value);
+            var imgW = img.width,
+                imgH = img.height;
+            var scaledImgW = imgW * scaleValue,
+                scaledImgH = imgH * scaleValue;
+            ctx.beginPath();
+            ctx.rect(imgOffsetLeftOfCanvas, imgOffsetTopOfCanvas, scaledImgW, scaledImgH);
+            if (ctx.isPointInPath(x, y)) {
+                ctx.closePath();
+                pointOffsetLeftOfImg = x - imgOffsetLeftOfCanvas;
+                pointOffsetTopOfImg = y - imgOffsetTopOfCanvas;
+                console.log('当前鼠标位于图片区域内');
+                return true
+            }
+            console.log('当前鼠标位于图片区域外');
+            return false
+        }
+        function showMagnifier (x, y) {
+            clear();
+            drawImageByScale();
+            drawMagnifier(magnifierRadius.value, magnifierScale.value, x, y);
+        }
+        function loadImg (src) {
+            img.onload = function () {
+                imgOffsetLeftOfCanvas = c.width / 2 - this.width / 2;
+                imgOffsetTopOfCanvas = c.height / 2 - this.height / 2;
+                slider.value = 1;
+                showMsg(slider, slider.value);
+                clear();
+                drawImageByScale();
+                drawWaterMark();
+            }
+            img.src = src;
+        }
+        function moveImg (x, y) {
+            var scaleValue = Number(slider.value);
+            var imgW = img.width,
+                imgH = img.height;
+            var scaledImgW = imgW * scaleValue,
+                scaledImgH = imgH * scaleValue;
+            ctx.drawImage(img, imgOffsetLeftOfCanvas, imgOffsetTopOfCanvas, scaledImgW, scaledImgH);
+        }
+        function drawImageByScale () {
+            var scaleValue = Number(slider.value);
+            var imgW = img.width,
+                imgH = img.height;
+            var scaledImgW = imgW * scaleValue,
+                scaledImgH = imgH * scaleValue;
+            ctx.drawImage(img, imgOffsetLeftOfCanvas, imgOffsetTopOfCanvas, scaledImgW, scaledImgH);
+        }
+        function drawWaterMark () {
+            var wmC = document.createElement('canvas');
+            var wmCtx = wmC.getContext('2d');
+            wmC.width = 200;
+            wmC.height = 60;
+            wmCtx.font = '24px Arial';
+            wmCtx.lineWidth = 1;
+            wmCtx.fillStyle = 'gray'
+            wmCtx.textBaseline = 'middle';
+            wmCtx.textAlign = 'center';
+            wmCtx.fillText('Made by Hanson',wmC.width / 2, wmC.height / 2);
+            ctx.drawImage(wmC, c.width - wmC.width, c.height - wmC.height);
+        }
+        function drawMagnifier (r, scaleRate, dx, dy) {
+            r = Number(r);
+            scaleRate = Number(scaleRate);
+            var mC = document.createElement('canvas');
+            var mCtx = mC.getContext('2d');
+            mC.width = r * 2
+            mC.height = r * 2;
+            mCtx.fillStyle = 'white';
+            mCtx.fillRect(0, 0, mC.width, mC.height);
+            mCtx.drawImage(c, dx - r, dy - r, r * 2, r * 2, 0 - (mC.width * scaleRate - mC.width) / 2, 0 - (mC.height * scaleRate - mC.height) / 2, mC.width * scaleRate , mC.height * scaleRate);
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(dx, dy, r, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.clip();
+            ctx.drawImage(mC, 0, 0, mC.width, mC.height, dx - mC.width / 2, dy - mC.height / 2, mC.width, mC.height);
+            ctx.restore();
+        }
+        function showMsg (ele, text) {
+            ele.nextElementSibling.innerHTML = text;
+        }
+        function showMsgs () {
+            showMsg(slider, slider.value);
+            showMsg(magnifierScale, magnifierScale.value);
+            showMsg(magnifierRadius, magnifierRadius.value);
+        }
+        function hideMagnifier () {
+            clear();
+            drawImageByScale();
+            drawWaterMark();
+        }
+        function clear () {
+            ctx.clearRect(0, 0, c.width, c.height);
+        }
+        function getCheckedBySelector(selection) {
+            return document.querySelector(selection).checked; 
+        }
+        function addRadioListener () {
+            document.querySelectorAll('input[type=radio][name=radio]').forEach((radio) => {
+                radio.addEventListener('change', function () {
+                    changeCursorShape();
+                });
+            });
+        }
+        function changeCursorShape () {
+                c.classList.toggle('cursor-move');
+                c.classList.toggle('cursor-zoom-in');
+        }
+    </script>
+</body>
+</html>

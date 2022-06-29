@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0; padding: 0;
+        }
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas">Unsupport canvas</canvas>
+    <script>
+        const canvas = document.getElementById('canvas')
+        const ctx = canvas.getContext('2d')
+        const stars = [] // 总星数，用数组保存
+        const RADIUS = .5 // 星的半径
+        const FILL_STAR_COLOR = '#FFFFFF' // 星的颜色
+        const FILL_BACKGROUND_COLOR = '#000000' // 背景颜色
+        const MIN_SPEED = 0.1 // 星的最小速度
+        const MAX_SPEED = 0.5 // 球的最大速度
+        const ATTRACT_RADIUS = 100 // 吸引多少半径内的星
+        const STARS_NUM = 150 // 星的数量
+        const LINE_WIDTH = .5 // 线条宽度
+        let x = 0, y = 0 // 跟踪的鼠标坐标
+        init()
+        function init() {
+            resize()
+            showStarSky()
+            window.addEventListener('resize', resize)
+            document.addEventListener('mousemove', mouseMove)
+            document.addEventListener('mouseleave', mouseLeave)
+        }
+        function showStarSky() {
+        	appendStars(STARS_NUM)
+            animate()
+        }
+        function mouseMove(e) {
+        	x = e.clientX
+        	y = e.clientY
+        }
+        function mouseLeave() {
+        	// 放弃跟踪
+        	x = 0
+        	y = 0
+        }
+        function resize() {
+            canvas.width = document.documentElement.clientWidth
+            canvas.height = document.documentElement.clientHeight
+        }
+        function clearRect() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+        }
+        function drawBackground() {
+            ctx.fillStyle = FILL_BACKGROUND_COLOR
+            ctx.fillRect(0, 0, canvas.width, canvas.height)
+        }
+        function buildPoint(x, y) {
+            ctx.beginPath()
+            ctx.arc(x, y, RADIUS, 0, 2 * Math.PI)
+        }
+        function animate() {
+            requestAnimationFrame(cb)
+            function cb() {
+            	const rejectedStars = []
+                const len = stars.length
+                drawBackground()
+                for (let i = 0; i < len; i++) {
+                    const star = stars[i]
+                    moveStar(star)
+                    attractStar(star)
+                    if (checkReachBoundary(star)) rejectedStars.push(star)
+                }
+            	removeRejectedStars(rejectedStars)
+                appendStars(rejectedStars.length)
+                console.log('stars:', stars.length)
+                requestAnimationFrame(cb)
+            }
+        }
+        function appendStars(n) {
+            for (let i = 0; i < n; i++) {
+                appendStar()
+            }
+        }
+        function moveStar(star) {
+        	star.x += star.vx
+            star.y += star.vy
+        	buildPoint(star.x, star.y)
+            drawPoint()
+        }
+        function attractStar(star) {
+        	if (x === 0 || y === 0) return // x 或  y 为  0 视为放弃吸引
+        	if (Math.abs(x - star.x) <= ATTRACT_RADIUS && Math.abs(y - star.y) <= ATTRACT_RADIUS) {
+        		buildLine(x, y, star.x, star.y)
+            	drawLine()
+        	}
+        }
+        function findAttractedStars() {
+        	const len = stars.length
+        	for (let i = 0; i < len; i++) {
+        		
+        	}
+        }
+        function appendStar() {
+            let randomVx = Math.random()
+            let randomVy = Math.random()
+            randomVx = randomVx < MIN_SPEED ? MIN_SPEED: randomVx
+            randomVx = randomVx > MAX_SPEED ? MAX_SPEED: randomVx
+            randomVy = randomVy < MIN_SPEED ? MIN_SPEED: randomVy
+            randomVy = randomVy > MAX_SPEED ? MAX_SPEED: randomVy
+            const star = {
+                x: random(0, canvas.width),
+                y: random(0, canvas.height),
+                vx: Math.random() < 0.5 ? randomVx : -randomVx,
+                vy: Math.random() < 0.5 ? randomVy : -randomVy
+           }
+           stars.push(star)
+           return star
+        }
+        function buildLine(startX, startY, endX, endY) {
+            ctx.beginPath()
+            ctx.lineTo(startX, startY)
+            ctx.lineTo(endX, endY)
+        }
+        function drawPoint() {
+            ctx.fillStyle = FILL_STAR_COLOR
+            ctx.fill()
+        }
+        function drawLine() {
+        	ctx.strokeStyle = FILL_STAR_COLOR
+        	ctx.lineWidth = LINE_WIDTH
+        	ctx.stroke()
+        }
+        function random(min, max) {
+            return min + Math.floor((Math.random() * (max - min + 1)))
+        }
+        
+        function checkReachBoundary(star) {
+        	if (star.y + RADIUS <= 0 || star.x - RADIUS >= canvas.width || star.y + RADIUS  >= canvas.height || star.x + RADIUS <= 0) {
+            	return true
+            	}
+        	return false
+        }
+        function removeRejectedStars(rejectedStars) {
+            const rejectedStarsLen = rejectedStars.length
+            let i = 0
+            while (i !== rejectedStarsLen) {
+                const index = stars.indexOf(rejectedStars[i])
+                if (index !== -1) stars.splice(index, 1)
+                i++
+            }
+        }
+    </script>
+</body>
+</html>

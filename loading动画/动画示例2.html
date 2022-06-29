@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <style>
+        *{margin:0; padding:0;}
+    </style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{margin:0; padding:0;}
+        @keyframes changeHeight{
+            from{
+                transform:rotateX(0);
+            }
+            to{
+                transform:rotateX(60deg);
+            }
+        }
+        .wrap{
+            margin:20% auto; 
+            width:150px;height: 150px;
+            background-color: rgb(28, 28, 53);
+            text-align: center;
+            padding:0 10px;
+        }
+        .wrap>div{
+            width:10px;height: 70px;
+            margin: 40px 3px;
+            background-color: rgb(65, 233, 255);
+            display: inline-block;
+        }
+        .line1{animation:changeHeight .5s infinite alternate;}
+        .line2{animation:changeHeight .5s .2s infinite alternate;}
+        .line3{animation:changeHeight .5s .4s infinite alternate;}
+        .line4{animation:changeHeight .5s .6s infinite alternate;}
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="line1"></div>
+        <div class="line2"></div>
+        <div class="line3"></div>
+        <div class="line4"></div>
+    </div>
+</body>
+</html>

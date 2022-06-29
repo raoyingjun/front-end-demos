@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .wrapper {
+            width: 150px;
+            border: 1px solid gray;
+            position: relative;
+            color: white;
+            height: 200px;
+            transition: all 1s;
+            line-height: 200px;
+            text-align: center;
+            transform-style: preserve-3d; /* 保留子元素的 3D 样式 */
+            margin: 100px auto;
+            /* perspective: 500px; 使用该属性则透视点在子元素。运动的是子元素。*/
+            transform: perspective(500px); /* 设定透视点，远小近大。
+                                            透视点在自身，不应该在子元素上设置。
+                                            因为是自身在运动。子元素并无运动 */
+        }
+        .wrapper:hover{
+            transform: rotateY(180deg);
+        }
+        .front,.back {
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden; /* 设置背面不可见 */
+            position: absolute;
+        }
+        .front {
+            background-color: red;
+        }
+        .back {
+            transform: rotateY(180deg);
+            background-color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="front">front</div>
+        <div class="back">back</div>
+    </div>
+</body>
+</html>

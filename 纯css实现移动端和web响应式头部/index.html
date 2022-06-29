@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        li {
+            list-style-type: none;
+        }
+        
+        .header-wrapper {
+            line-height: 60px;
+            width: 100%;
+            background-color: rgb(55, 55, 55);
+        }
+
+        .header {
+            color: white;
+            text-align: center;
+            font-size: 22px;
+            position: relative;
+        }
+
+        .burger-menu {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 35px;
+            height: 25px;
+            margin-top: 17.5px;
+            margin-left: 15px;
+            background-image: linear-gradient(to bottom,
+                    white 0,
+                    white 20%,
+                    transparent 20%,
+                    transparent 40%,
+                    white 40%,
+                    white 60%,
+                    transparent 60%,
+                    transparent 80%,
+                    white 80%);
+        }
+
+        #burder-menu:checked + .burger-menu + .list{
+            height: auto;
+            
+        }
+        .list {
+            height: 0;
+            overflow: hidden;
+            font-size: 16px;
+        }
+        .list li:hover {            
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        /* 下面为 PC 的效果 */
+
+        @media (min-width: 768px) {
+            .header {
+                text-align: left;
+                padding-left: 10px;
+                box-sizing: border-box;
+                max-width: 1024px;
+            }
+
+            .list {
+                float: right;
+                height: auto;
+                background-color: transparent;
+            }
+            
+            .list li {
+                float: left;
+                margin: 0 20px;
+            }
+
+            .burger-menu {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header-wrapper">
+        <div class="header">
+            Gucci
+            <input type="checkbox" style="display: none;" id="burder-menu">
+            <label class="burger-menu" for="burder-menu"></label>
+            <ul class="list">
+                <li>新品预购</li>
+                <li>热门品牌</li>
+                <li>限购专场</li>
+                <li>联系我们</li>
+                <li>关于我们</li>
+                <li>人才招聘</li>
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>

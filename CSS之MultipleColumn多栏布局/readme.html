@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Multi-Column 多栏布局</title>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+        
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        
+        
+    </head>
+    <body class="vscode-light">
+        <h1 id="multi-column-%e5%a4%9a%e6%a0%8f%e5%b8%83%e5%b1%80">Multi-Column 多栏布局</h1>
+<h2 id="column-count"><code>column-count</code></h2>
+<p><code>column-count</code> 指定要分成几个栏目。</p>
+<p>效果图如下</p>
+<p><img src="./images/column-count.png" alt="图片显示失败"></p>
+<pre><code class="language-html"><div><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>清晨一觉醒来...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>晨羽浮光金水澄...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>云光与飞鸟在静...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>这夏的序幕徐...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>晴妆淡影的光....<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>六点多的阳光已经毒热的...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</div></code></pre>
+<pre><code class="language-css"><div><span class="hljs-selector-tag">div</span> {
+    <span class="hljs-attribute">column-count</span>: <span class="hljs-number">2</span>;
+}
+</div></code></pre>
+<p><strong>注意</strong></p>
+<p>浏览器将会自动在每栏之间生成间隙。</p>
+<h2 id="column-width"><code>column-width</code></h2>
+<p><code>column-width</code> 指定每栏的宽度。</p>
+<p>效果图如下</p>
+<p><img src="./images/column-width.png" alt="图片显示失败"></p>
+<p><strong>注意</strong></p>
+<p>当设定了分栏的宽度后，分栏的宽度并不一定是所设定的值</p>
+<ul>
+<li>
+<p>如果容器的宽度大于 <code>每栏宽度 * 栏数 + 总间隙</code> 的和，那么 <code>column-width</code> 将会自动增加。</p>
+</li>
+<li>
+<p>如果容器的宽度不足以支撑 <code>每栏宽度 * 栏数 + 总间隙</code> 的和，那么 <code>column-count</code> 的栏数将会自动减小，以保持 <code>column-width</code> 的值</p>
+</li>
+</ul>
+<p>动图演示如下</p>
+<p><img src="./images/column-width-gif.gif" alt="图片显示失败"></p>
+<pre><code class="language-html"><div><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>清晨一觉醒来...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>晨羽浮光金水澄...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>云光与飞鸟在静...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>这夏的序幕徐...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>晴妆淡影的光....<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>六点多的阳光已经毒热的...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</div></code></pre>
+<pre><code class="language-css"><div><span class="hljs-selector-tag">div</span> {
+    <span class="hljs-attribute">column-count</span>: <span class="hljs-number">3</span>;
+    <span class="hljs-attribute">column-width</span>: <span class="hljs-number">200px</span>;
+}
+</div></code></pre>
+<h2 id="column-gap"><code>column-gap</code></h2>
+<p><code>column-gap</code> 指定每栏之间的间隙大小</p>
+<p>效果图如下</p>
+<p><img src="./images/column-gap.png" alt="图片显示失败"></p>
+<pre><code class="language-html"><div><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>清晨一觉醒来...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>晨羽浮光金水澄...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>云光与飞鸟在静...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>这夏的序幕徐...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>晴妆淡影的光....<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>六点多的阳光已经毒热的...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</div></code></pre>
+<pre><code class="language-css"><div><span class="hljs-selector-tag">div</span> {
+    <span class="hljs-attribute">column-count</span>: <span class="hljs-number">3</span>;
+    <span class="hljs-attribute">column-width</span>: <span class="hljs-number">200px</span>;
+    <span class="hljs-attribute">column-gap</span>: <span class="hljs-number">50px</span>;
+}
+</div></code></pre>
+<h2 id="column-rule"><code>column-rule</code></h2>
+<p><code>column-rule</code> 指定每栏之间的间隙样式</p>
+<p>效果图如下</p>
+<p><img src="./images/column-rule.png" alt="图片显示失败"></p>
+<pre><code class="language-html"><div><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>清晨一觉醒来...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>晨羽浮光金水澄...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>云光与飞鸟在静...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>这夏的序幕徐...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>晴妆淡影的光....<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>六点多的阳光已经毒热的...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</div></code></pre>
+<pre><code class="language-css"><div><span class="hljs-selector-tag">div</span> {
+    <span class="hljs-attribute">column-count</span>: <span class="hljs-number">3</span>;
+    <span class="hljs-attribute">column-gap</span>: <span class="hljs-number">2px</span> dashed red;
+}
+</div></code></pre>
+<h2 id="column-span"><code>column-span</code></h2>
+<p><code>column-span</code> 指定应该横跨的列数。</p>
+<p>有两个可选参数</p>
+<ul>
+<li>
+<p><code>1</code> 应该横跨一列（默认值，可以省略不写）</p>
+<p>效果图如下</p>
+<p><img src="./images/column-span-none.png" alt="图片显示失败"></p>
+<pre><code class="language-html"><div><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>清晨一觉醒来...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>晨羽浮光金水澄...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>云光与飞鸟在静...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>这夏的序幕徐...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>晴妆淡影的光....<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>
+        六点多的阳光已经毒热
+        <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>大字标题<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+        的刺目了...
+    <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</div></code></pre>
+<pre><code class="language-css"><div><span class="hljs-selector-tag">div</span> {
+    <span class="hljs-attribute">column-count</span>: <span class="hljs-number">3</span>;
+}
+<span class="hljs-selector-tag">h2</span> {
+    <span class="hljs-attribute">text-align</span>: center;
+    <span class="hljs-comment">/* column-span: none 是否设置都结果都一样*/</span>
+}
+</div></code></pre>
+</li>
+<li>
+<p><code>all</code> 应该横跨所有列</p>
+<p>效果图如下</p>
+<p><img src="./images/column-span-all.png" alt="图片显示失败"></p>
+<pre><code class="language-html"><div><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>清晨一觉醒来...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>晨羽浮光金水澄...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>云光与飞鸟在静...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>这夏的序幕徐...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>晴妆淡影的光....<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>
+        六点多的阳光已经毒热
+        <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>大字标题<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+        的刺目了...
+    <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</div></code></pre>
+<pre><code class="language-css"><div><span class="hljs-selector-tag">div</span> {
+    <span class="hljs-attribute">column-count</span>: <span class="hljs-number">3</span>;
+}
+<span class="hljs-selector-tag">h2</span> {
+    <span class="hljs-attribute">text-align</span>: center;
+    <span class="hljs-attribute">column-span</span>: all;
+}
+</div></code></pre>
+</li>
+</ul>
+
+    </body>
+    </html>

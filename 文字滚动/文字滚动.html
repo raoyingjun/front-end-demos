@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+</head>
+<style>
+    *{margin: 0 auto; padding: 0;list-style: none;}
+    div{background-color: lightgray;width:200px;height: 20px;margin-top:200px;overflow-y: hidden}
+    ul{text-align: center;}
+    ul li{background-color: skyblue;line-height: 20px;font-size:14px}
+</style>
+<body>
+    <div id="box">
+        <ul id="ul">
+            <li>落叶随着风高低起舞。</li>
+            <li>花儿在风中笑弯了腰。</li>
+            <li>鸣蝉在树叶里长吟。</li>
+            <li>蜡炬成灰泪始干。</li>
+            <li>书是人类进步的阶梯。</li>
+            <li>书是智慧的钥匙。</li>
+            <li>这个人壮硕如虎。</li>
+            <li>落叶随着风高低起舞。</li>
+        </ul>
+    </div>
+    <p style="text-align: center;margin-top:50px;">无缝文字滚动</p>
+    <script>
+        var div=document.querySelector("#box");
+        var ul=document.querySelector("#ul");
+        var timer=setInterval(function(){
+            if(div.scrollTop==div.scrollHeight-20){
+                div.scrollTop=0;
+            }
+            var top=div.scrollTop+20;
+            var move=setInterval(function(){
+                div.scrollTop+=1
+                if(div.scrollTop==top)
+                    clearInterval(move);
+            },30)           
+        },2000)
+        
+    
+    </script>
+</body>
+</html>

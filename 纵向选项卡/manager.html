@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<style>
+	*{margin: 0 auto; padding: 0;}
+	.shell{width:1300px; height:800px; margin-top:60px;border: 1px solid black;box-shadow:0px 0px 50px lightgray; background-color:aliceblue}
+	.top{height: 100px; text-align: center;line-height: 100px; border-bottom: 1px solid black;cursor: default;}
+	.left{width:299px; height: 700px; float: left; border-right: 1px solid black;}
+	.left>ul{list-style: none;}
+	.left>ul>li{border-bottom: 1px solid black;height: 100px;text-align: center; line-height: 100px;cursor: pointer}
+	.right{width: 1000px; height: 700px;float: right;background-color: white;}
+	.right>div{width:100%;height: 100%;cursor:default}
+	.hide{display: none;}
+	.left>ul>li.hightlight{background-color: white; width: 300px}
+</style>
+</head>
+<body>
+	<div class="shell">
+		<div class="top"><h1>无标题</h1></div>
+		<div class="left" id="left">
+			<ul>
+				<li class="hightlight">列表项1</li>
+				<li>列表项2</li>
+				<li>列表项3</li>
+				<li>列表项4</li>
+				<li>列表项5</li>
+			</ul>
+		</div>
+		<div class="right" id="right">
+			<div>人活着，别想得太复杂，就这么简单的一辈子，在亲人的欢乐声中诞生，又在亲人的悲伤声中离去。而这一切我们却都不知道，可以预料的，谁也无法控制自己的生与死，但我们值得庆幸的是自己拥有了生命，拥有了这一辈子。</div>
+			<div class="hide">　人就这么简单的一辈子，我们都希望自己有个幸福完美的家，每天都是个快乐顺心的人。但在现实生活中，不是一切的人与事都尽人意的，每天我们都会踫到各种各样的难处和烦恼。人活一辈子中，会遭遇很多无可奈何的事，邂逅多少恩恩怨怨的人，可是想到的不就这么一辈子吗？还有什么可看不开想不开的？人世间的困惑忧愁，恩怨情仇几十年不都烟散云消了，还有什么不能化解，不能消气的呢。</div>
+			<div class="hide">　人就这一辈子，我们应该轻松愉快地过好这辈子。不管上天给予我们什么，只要我们不丧失对生活的信心，对理想的追求，只要你虔诚地不息努力，乐观从容地去对待生活，我想上天会眷顾生活的“爱者”得到成功的希望。人就这么短暂的一辈，我们不能在人世间清苦地白走一趟。所以让我们一切从快乐开始！做你想要做的事，爱你想要爱的人。若做错了，不必后悔，不必埋怨，更不必自暴自弃，世人从来没有完美无缺的人。跌倒了，爬起来，振作精神，重新来过。不经风雨又怎能见彩虹，相信自己是生活的强者，下次在人生路上就会走得更稳。</div>
+			<div class="hide">人就这么简单的一辈子，到这世上匆匆忙忙地来一次，我们每个人的确都有自己奋斗的目标。如果该奋斗的我们巳经奋斗了，该拼博的我们已经拼搏了，可惜还不能如愿以偿。是否我们可以换个角度去想一想：人生在世，有多少梦想我们无法实现的，有多少目标我们难以达到。人就这一辈子，我们在仰视那些我们无法实现的梦想，眺望那些我们无法达到的目标时，是否应该以一颗平常心去看待我们的得失。“岂能尽如人意但求无愧于心。”对于一件事，只要我们尽力去做了，没成功，也应该觉得很充实，很满足，而且不论其结果究竟如何。</div>
+			<div class="hide">人就这么简单的一辈子，要想活得舒心，活得洒脱，你就要“该记住的要记住，该忘记的要忘记，改变能改变的，接受不能接受的。”唯有这样，你才会活出一个富有个性的全新的自我！人就这一辈子，不要去过份地苛求，不要有太多的奢望。若我们苦苦追求却还是一无所获，我们不妨这样想想：既然上天不偏爱于我，不让我鹤立鸡群，不让我出类拔萃，我又何别硬要去强求呢？别人声名显赫，而自己却平平庸庸。我们不妨这样安慰自己：该是你的，总归是你的，躲也躲不过；不该是你的，永远也不是你，求也求不来。</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="jquery-3.4.1.min.js"></script>
+<script>
+$(function(){
+	var $divs=$("div#right").find(">div")
+	$("div#left").find("ul>li").click(function(){
+		var $this=$(this)
+		$(this.parentNode.children).removeClass("hightlight")
+		$this.addClass("hightlight");
+		$divs.addClass("hide").eq($this.index()).removeClass("hide")
+		
+	})
+})
+</script>
+</html>

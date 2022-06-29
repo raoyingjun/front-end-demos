@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{margin:0;padding:0}
+        #showBox{width:400px;height: 200px;line-height: 200px; text-align: center; font-size:20px;}
+    </style>
+</head>
+<body>
+    <div id="showBox">dsa</div>
+    <input type="range" min="0" max="255" oninput="console.log(this.value)" id="red">
+    <br>
+    <input type="range" min="0" max="255" oninput="console.log(this.value)" id="green">
+    <br>
+    <input type="range" min="0" max="255" oninput="console.log(this.value)" id="blue">
+    <script>
+        var red = document.querySelector('#red');
+        var green = document.querySelector('#green');
+        var blue = document.querySelector('#blue');
+        var showBox = document.querySelector('#showBox');
+        var rgb = 'rgb(' + red.value + ', ' + green.value + ', ' + blue.value + ')';
+        showBox.style.backgroundColor = rgb;
+        showBox.innerHTML = rgb;
+        red.oninput = function () {
+            rgb = 'rgb(' + red.value + ', ' + green.value + ', ' + blue.value + ')'
+            showBox.style.backgroundColor = rgb;
+            showBox.innerHTML = rgb;
+        }
+        green.oninput = function () {
+            rgb = 'rgb(' + red.value + ', ' + green.value + ', ' + blue.value + ')'
+            showBox.style.backgroundColor = rgb;
+            showBox.innerHTML = rgb;
+        }
+        blue.oninput = function () {
+            rgb = 'rgb(' + red.value + ', ' + green.value + ', ' + blue.value + ')'
+            showBox.style.backgroundColor = rgb;
+            showBox.innerHTML = rgb;
+        }
+    </script>
+</body>
+</html>

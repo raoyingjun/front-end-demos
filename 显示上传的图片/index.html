@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        img {
+            border: 1px solid #E3E3E3;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body>
+    blob:
+    <p><input type="file" id="file1"><img src="#" id="img1" /></p>
+    <hr>
+    base64:
+    <p><input type="file" id="file2"><img src="#" id="img2" /></p>
+    <script>
+        document.querySelector('#file1').onchange = function (e) {
+            var fr = new FileReader();
+            fr.readAsArrayBuffer(this.files[0]);
+            fr.onload = function () {
+                var blob = new Blob([this.result]);
+                document.querySelector('#img1').src = URL.createObjectURL(blob);
+            }
+        }
+        document.querySelector('#file2').onchange = function (e) {
+            var fr = new FileReader();
+            fr.readAsDataURL(this.files[0]);
+            fr.onload = function () {
+                document.querySelector('#img2').src = this.result;
+            }
+        }
+    </script>
+</body>
+
+</html>

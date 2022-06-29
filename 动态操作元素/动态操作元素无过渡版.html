@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>动态操作数组元素</title>
+	<style>
+		
+		*{margin: 0 auto;padding:0}
+		.shell{margin-top:  150px; position: relative;}
+		.ul-li{width:600px;  height: 80px; border:1px solid lightgray;border-radius:15px;text-align: center; line-height: 80px; font-size: 18px; margin: 15px auto; list-style: none; box-shadow: 10px 10px 20px lightgray}
+		.ul-li-div{display: inline-block;width:49%; text-align: center; cursor:default}
+		.ul-li-div-span{margin:0px 15px;cursor: pointer}
+		.ul-li-div-span:hover{text-decoration: underline}
+		.div{text-align: center; height: 50px; line-height: 50px;}
+		.div-input{width:200px; height: 30px;font-size: 16px;}
+		.div-button{ width:70px; height: 33px; border-style: none; outline:none; background-color: lightblue; font-size: 20px; font-size: 16px;}
+		.span{margin: 0px 10px; cursor: pointer; display: inline-block}
+		#btn:hover{cursor: pointer}
+
+
+		
+	</style>
+</head>
+
+<body>
+	<div class="shell">
+		<ul>
+			<li class="ul-li" id="template">
+				<div class="ul-li-div">JavaScript入门</div>
+				<div class="ul-li-div">
+					<span class="ul-li-div-span" >上移</span>
+					<span  class="ul-li-div-span">下移</span>
+					<span class="ul-li-div-span">删除</span>
+				</div>
+			</li>	
+		</ul>
+	</div>
+	<div class="div">
+			<input type="text" class="div-input" value="要添加的书名" id="input" autocomplete="off"/>
+			<button id="btn" class="div-button">添加</button>
+	</div>
+	
+	<script>
+		var message=document.querySelector("#message");
+		var btn=document.querySelector("#btn");
+		var input=document.querySelector("#input");
+		var template=document.querySelector("#template");
+		var parent=template.parentNode;
+		var clone=template.cloneNode(true);
+		parent.removeChild(template)
+		btn.onclick=function(){
+			find.append(input.value)
+		}
+		var find={
+			prev:function(obj){
+				while(obj.previousSibling!=null){
+					if(obj.previousSibling.nodeType==1){
+						return obj.previousSibling
+					}
+					obj=obj.previousSibling
+				}
+			},
+			next:function(obj){
+				while(obj.nextSibling!=null){
+					if(obj.nextSibling.nodeType==1){
+						return obj.nextSibling;
+					}
+					obj=obj.nextSibling;
+				}
+			},
+			remove:function(obj){
+				obj.parentNode.removeChild(obj);
+			},
+			append:function(text){
+				var li=clone.cloneNode(true)
+				li.children[0].innerHTML=text;
+				li.children[1].children[0].onclick=function(){
+					var li=this.parentNode.parentNode
+					var prevLi=find.prev(li)
+					if(prevLi==null){
+						return;
+					}
+					li.parentNode.insertBefore(li,prevLi)
+				}
+				li.children[1].children[1].onclick=function(){
+					var li=this.parentNode.parentNode
+					var nextLi=find.next(li)
+					if(nextLi==null){
+						return;
+					}
+					li.parentNode.insertBefore(nextLi,li)
+				}
+				li.children[1].children[2].onclick=function(){
+					find.remove(this.parentNode.parentNode)
+				}
+				parent.appendChild(li);
+			}
+		}
+		find.append("JavaScript案例式教程");
+		find.append("JavaWeb开发");
+	</script>
+</body>
+</html>

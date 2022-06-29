@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {margin: 0; padding: 0;}
+        canvas {
+            display: block;
+            margin: 50px auto;
+            border: 1px solid gray;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="800" height="800">
+        Your current browser don't support html canvas tag. please update your browser or shift to other browser.
+    </canvas> b
+    <script>
+        window.addEventListener('load', function () {
+            var c = document.querySelector('#canvas');
+            var ctx = c.getContext('2d');
+        });
+        function testIsPointInPath (c, ctx) {
+            var balls = [];
+            drawBalls();
+            function drawBalls() {
+                for (var i = 0; i < 5; i++) {
+                    var ball = {
+                        x: Math.floor(Math.random() * c.width),
+                        y: Math.floor(Math.random() * c.height),
+                        r: Math.floor(Math.random() * 50 + 10)
+                    }
+                    balls.push(ball);
+                    ctx.beginPath();
+                    ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+                    ctx.fill()
+                }
+            }
+            c.addEventListener('mousemove', function (e) {
+                console.log(e)
+                var x = e.clientX - this.getBoundingClientRect().left,
+                    y = e.clientY - this.getBoundingClientRect().top;
+                for (var i = 0; i < balls.length; i++) {
+                    var ball = balls[i];
+                    ctx.beginPath();
+                    ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+                    if (ctx.isPointInPath(x, y)) {
+                        ctx.fillStyle = 'red';
+                        ctx.fill();
+                    } else {
+                        ctx.fillStyle = 'black';
+                        ctx.fill();
+                    }
+                }
+            });
+        }
+        function testForPaperCutEffect (ctx) {
+            ctx.fillStyle = 'red'
+            ctx.arc(400, 400, 200, 0, Math.PI * 2);
+            ctx.arc(400, 400, 100, 0, Math.PI * 2, true);
+            ctx.fill();
+        }
+        function testForClip (ctx) {
+            ctx.fillRect(0, 0, 800, 800);
+            ctx.fillStyle = 'white';
+            ctx.arc(400, 400, 50, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.clip();
+            ctx.fillStyle = 'red';
+            ctx.font = "bold 40px Arial";
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('CANVAS', 400, 400);
+        }
+        function testForComposite (ctx) {
+            ctx.globalCompositeOperation = 'copy';
+            ctx.fillStyle = 'red';
+            ctx.fillRect(300, 300, 200, 200);
+            ctx.fillStyle = 'green';
+            ctx.fillRect(400, 400, 200, 200);
+        }
+        function drawText (ctx) {
+            var grd = ctx.createLinearGradient(200, 200, 350, 250);
+            grd.addColorStop(0, 'red');
+            grd.addColorStop(1, 'green');
+            ctx.font = "bold 40px Arial";
+            ctx.fillStyle = grd
+            ctx.fillText('hello', 200, 200);
+            console.log(ctx.measureText('hello'));
+            ctx.strokeText('hello', 200, 400);
+            console.log(ctx.measureText('hello'));
+
+        }
+        function drawBezierCurveTo (ctx) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(0, 400);
+            ctx.bezierCurveTo(300, 600, 550, 300, 800, 500);
+            ctx.stroke();
+            ctx.restore();
+            ctx.save();
+            ctx.moveTo(0, 400);
+            ctx.lineTo(300, 600);
+            ctx.lineTo(550, 300);
+            ctx.lineTo(800, 500);
+            ctx.stroke();
+            ctx.restore();
+        }
+        function testArcTo (ctx) {
+            ctx.save();
+            ctx.strokeStyle = 'red';
+            ctx.lineWidth = 5;
+            ctx.beginPath();
+            ctx.moveTo(600, 200)
+            ctx.arcTo(200, 100, 300, 600, 100);
+            ctx.stroke();
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.lineTo(600, 200);
+            ctx.lineTo(200, 100);
+            ctx.lineTo(300, 600);
+            ctx.stroke();
+            ctx.restore();
+        }
+        function drawMoon (ctx, x, y, r, d, deg = 0) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.scale(r, r);
+            ctx.rotate(deg * Math.PI / 180);
+            buildMoon(ctx, d);
+            ctx.restore();
+            ctx.stroke();
+        }
+        function buildMoon (ctx, d) {
+            ctx.beginPath();
+            var r = 1 / d * distance(0, -1, d, 0);
+            ctx.arc(0, 0, 1,  0.5 * Math.PI, 1.5 * Math.PI, true);
+            ctx.moveTo(0, -1);
+            ctx.arcTo(d, 0, 0, 1, r);
+        }
+        function distance (x1, y1, x2, y2) {
+            return Math.sqrt((x1 - x2) * (x1 -x2) + (y1 - y2) * (y1 -y2));
+        }
+        function drawRoundedRect (ctx, x, y, w, h, r = 0) {
+            ctx.save();
+            ctx.translate(x, y);
+            buildRoundedRect(ctx, w, h, r);
+            ctx.stroke();
+            ctx.restore();
+        }
+        function buildRoundedRect (ctx, w, h, r) {
+            ctx.beginPath();
+            ctx.arc(r, r, r, Math.PI, 1.5 * Math.PI);
+            ctx.lineTo(r, 0);
+            ctx.arc(w - r, r, r, 1.5 * Math.PI, 2 * Math.PI);
+            ctx.lineTo(w, r);
+            ctx.arc(w - r, h - r, r, 0, 0.5 * Math.PI);
+            ctx.lineTo(w - r, h);
+            ctx.arc(r, h - r, r, 0.5 * Math.PI, Math.PI);
+            ctx.lineTo(0, h - r);
+            ctx.closePath();
+        }
+        function drawStar (ctx, x, y, r, deg = 0) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate( deg * Math.PI / 180);
+            ctx.scale(r, r)
+            buildStar(ctx);
+            ctx.fill();
+            ctx.restore();
+        }
+        function buildStar (ctx) {
+            ctx.beginPath();
+            for (var i = 0; i < 5; i++) {
+                ctx.lineTo(Math.cos((18 + i * 72) * Math.PI / 180), (-Math.sin((18 + i * 72) * Math.PI / 180)));
+                ctx.lineTo(Math.cos((54 + i * 72) * Math.PI / 180) * 0.5, (-Math.sin((54 + i * 72) * Math.PI / 180) * 0.5));
+            }
+            ctx.closePath();
+        }
+        function createStarCanvasImage () {
+            var canvasImg = document.createElement('canvas');
+            var canvasImgCtx = canvasImg.getContext('2d');
+            canvasImg.width = 100;
+            canvasImg.height = 100;
+            drawStar(canvasImgCtx, 50, 50, 50);
+            buildStar(canvasImgCtx);
+            return canvasImg;
+        }
+    </script>
+</body>
+</html>

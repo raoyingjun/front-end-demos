@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div {
+            background-color: rgb(52, 80, 240);
+            color: white;
+            max-height: 0;
+
+            overflow: hidden;
+            transition: all 2s;
+        }
+
+
+        input {
+            display: none;
+        }
+
+        input:checked+div {
+
+            max-height: 999px;
+
+        }
+    </style>
+</head>
+
+<body>
+    <h1>纯css为不定高度的元素使用高度显示（张开）/隐藏（折叠）过渡动画效果</h1>
+    <h3>预备知识</h3>
+    <p>元素高度默认是由内容撑起的</p>
+    <h3>无法从 <code>height: 0</code> 到 <code>height: auto</code> 执行过渡动画的原因</h3>
+    <p>过渡动画无法识别 <code>auto, none</code> 等非数值属性</p>
+    <h3>照上点所说，那可以把 <code>auto</code> 变成一个固定值，则可以执行过渡动画了。例如 <code>500px</code> </h3>
+    <p>只适用于内容高度固定的情况。如果你的内容是会面临添加，删除等导致容器高度会变化的操作，那高度写死不就有问题吗？</p>
+    <h3>使用 <code>max-height</code> 解决高度会变化问题</h3>
+    <p>
+        先在元素上使用 <code>max-height: 0</code> 代替 <code>height: 0</code>（<strong> 还有 <code>transition: all 1s</code> </strong>）。
+        因为最大高度为 <code>0</code>，所以高度肯定是 <code>0</code>。
+        接着在需要使用过渡动画的位置，例如 <code>:hover</code> 状态。
+        使用 <code>max-height: 999px, max-height: 9999px</code> 等数值，
+        只要确保其值大于等于默认由内容撑起的高度值即可。
+        在此应该就可以得到一个伴随过渡动画的高度变化效果
+    </p>
+    <h3>为什么使用 <code>max-height</code> 有过渡动画效果</h3>
+    <p>
+        实际执行过渡的属性是 <code>max-height</code>。
+        在 <code>max-height</code> 从 <code>0 到 999px</code> 或 <code>0 到 9999px</code> 期间。
+        <code>height</code> 的值也在从 <code>0</code> 开始跟着 <code>max-height</code> 的值一起变大，形成了过渡动画。
+        <strong>注意，当 <code>height</code> 变大到相等于由内容撑起的高度值时，<code>height</code> 就不会再变大了。因为 <code>height</code> 默认是由内容撑起的，此时已经到达了撑起内容的高度，就不会再增大了！</strong>
+    </p>
+    <h3>使用 <code>max-height</code> 的问题</h3>
+    <p>
+        当你给 <code>max-height</code> 设置较大的值时，例如 <code>9999px</code> ，会发现高度的隐藏过渡动画有明显的迟钝。
+        原因是 <code>max-height</code> 设置较大的值时，例如是从 <code>9999px</code> 开始变小的。
+        当 <code>max-height</code> < <code>height</code>  的时候， <code>height</code> 才会变小,因为 <code>height</code> 不可能大于 <code>max-height</code> 。
+        因此在 <code>max-height</code> 一直减小到小于 <code>height</code> 之前所花费的过渡时间，就是导致迟钝的原因，所以请设置适当的 <code>max-height</code> 的值</height></p>
+    <hr>
+    <p>演示如下：</p>
+    <label for="c">显示/隐藏</label>
+    <input type="checkbox" name="" id="c">
+    <div>
+        <p>我是文字</p>
+        <p>我是文字</p>
+        <p>我是文字</p>
+    </div>
+</body>
+
+</html>

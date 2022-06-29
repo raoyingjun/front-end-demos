@@ -1,0 +1,29 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="file" name="file" id="file">
+    <p id="output"></p>
+    <script>
+        const fileInput = document.getElementById('file')
+        const output = document.getElementById('output')
+        fileInput.addEventListener('change', e => {
+            const file = e.target.files[0]
+            const fr = new FileReader()
+            fr.addEventListener('load', e => {
+                const result = e.target.result
+                const lines = result.split(/\r\n/)
+                if (!lines[lines.length - 1]) {
+                    lines.pop()
+                }
+                output.innerHTML = lines.toString()
+            })
+            fr.readAsText(file)
+        })
+    </script>
+</body>
+</html>

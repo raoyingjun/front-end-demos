@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>无标题文档</title>
+</head>
+<style>
+    *{list-style:none; margin:0 auto;padding:0}    
+    div#nav{width:1024px;position: relative;height: 40px;background-color:#328048;}
+
+    div>ul{height: 35px}
+    div>ul>li{float: left;line-height:35px;margin:0 60px;color: white;}
+    div>ul>li>a{text-decoration: none;color: white;transition: color .5s}
+    div>ul>li>a:hover{color:orange}
+    #nav>span{transition: left .5s,width .5s; background-color: orange;width:30px;height: 5px;display: block;position: absolute;left:60px}
+</style>
+<body>
+<div id="nav">
+    <ul>
+        <li><a href="#">首页</a></li>
+        <li><a href="#">相册</a></li>
+        <li><a href="#">阳光生活</a></li>
+        <li><a href="#">校园情缘</a></li>
+        <li><a href="#">释放梦想</a></li>
+        <li><a href="#">留言</a></li>
+    </ul>
+    <span></span>
+</div>
+    <script>
+        (function(){
+            var nav=document.querySelector("#nav");
+            var ul=nav.children[0];
+            var span=nav.children[1];
+            var lis=ul.children;
+            for(var li of lis){
+                li.onmouseenter=function(e){
+                    span.style.width=this.offsetWidth+"px";
+                    span.style.left=this.offsetLeft+"px";
+                }
+            } 
+        })(); 
+    </script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        @keyframes disappear{
+            0% {background-color: transparent;}
+            100% {background-color: yellow;}
+        }
+        *{margin:0;padding:0;}
+        .wrap {
+            width: calc(1920px / 2);
+            height:  calc(1080px / 2);
+            background-image: url("./image.jpg");
+            background-size: cover;
+            margin: 10% auto;
+        }
+        .wrap>div {
+            width:calc(20%);
+            height: calc(33.33%);
+            float: left;
+            box-sizing: border-box;
+            border: 3px solid yellow;   
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap" id="wrap">
+        <div></div><div></div><div></div><div></div><div></div>
+        <div></div><div></div><div></div><div></div><div></div>
+        <div></div><div></div><div></div><div></div><div></div>
+    </div>
+    <script>
+        var trans = document.querySelector('#wrap').children;
+        for (var i = 0; i < trans.length; i++) {
+            trans[i].style.animation = 'disappear 1s '+ i / 10 + 's' +' both';
+        }
+    </script>
+</body>
+</html>

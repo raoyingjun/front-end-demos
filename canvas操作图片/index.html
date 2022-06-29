@@ -1,0 +1,107 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+
+        canvas {
+            box-shadow: 0 0 20px gray;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+<p>请在本地服务器或远程服务器下访问</p>
+<img src="./images/red.png" hidden id="red">
+<img src="./images/green.png" hidden id="green">
+<img src="./images/yellow.png" hidden id="yellow">
+<img src="./images/blue.png" hidden id="blue">
+<canvas width="400" height="400" id="sourceCanvas"></canvas>
+<canvas width="400" height="400" id="targetCanvas"></canvas>
+<script>
+    const IMAGES = {
+        RED: $('red'),
+        GREEN: $('green'),
+        YELLOW: $('yellow'),
+        BLUE: $('blue')
+    }
+    const sourceCanvas = $('sourceCanvas')
+    const targetCanvas = $('targetCanvas')
+    const sourceCtx = sourceCanvas.getContext('2d')
+    const targetCtx = targetCanvas.getContext('2d')
+
+    function $(id) {
+        return document.getElementById(id)
+    }
+
+    function renderSourceCanvas() {
+        sourceCtx.drawImage(IMAGES.RED, 0, 0)
+        sourceCtx.drawImage(IMAGES.GREEN, 200, 0)
+        sourceCtx.drawImage(IMAGES.BLUE, 0, 200)
+        sourceCtx.drawImage(IMAGES.YELLOW, 200, 200)
+    }
+
+    function copySourceCanvasToTargetCanvas() {
+        const sourceImageData = sourceCtx.getImageData(0, 0, 400, 400)
+        const targetImageData = targetCtx.getImageData(0, 0, 400, 400)
+        const {data: sourceData, width, height} = sourceImageData
+        const targetData = targetImageData.data
+        for (i = 0; i < width * height; i++) {
+            const [
+                red,
+                green,
+                blue,
+                alpha
+            ] = [
+                sourceData[i * 4 + 0],
+                sourceData[i * 4 + 1],
+                sourceData[i * 4 + 2],
+                sourceData[i * 4 + 3]
+            ]
+            targetData[i * 4 + 0] = red
+            targetData[i * 4 + 1] = green
+            targetData[i * 4 + 2] = blue
+            targetData[i * 4 + 3] = alpha
+        }
+        targetCtx.putImageData(targetImageData, 0, 0)
+    }
+
+    /**
+     * 从源像素块开始绘制到目标像素块指定偏移值的位置
+     * @param {ImageData} imageData
+     * @param {Number} offsetX
+     * @param {Number} offsetY
+     */
+    function moveSourceImageDataToTargetCanvasByPixel(imageData, offsetX = 0, offsetY = 0) {
+        const sourceData = imageData.data
+        const targetImageData = targetCtx.getImageData(0, 0, 400, 400)
+        const targetData = targetImageData.data
+        // 以下逻辑实现将源区域开始每像素复制到目标指定偏移量开始的区域
+        for (let h = 0; h < 200 /* 要填充的像素块高度 */; h++) {
+            for (let w = 0; w < 200 /* 要填充的像素块宽度 */; w++) {
+                const sourcePos = h * 200 /* 要填充的像素块宽度 */ + w;
+                const targetPos = offsetY * 400 /* 该表达式用于计算出垂直方向开始绘制的偏移量 */
+                    + h * 400 /* 该表达式用于计算出目标像素块已被填充的偏移量 */
+                    + offsetX + w /* 该表达式用于计算出水平方向开始绘制的偏移量 */
+                targetData[targetPos * 4 + 0] = sourceData[sourcePos * 4 + 0]
+                targetData[targetPos * 4 + 1] = sourceData[sourcePos * 4 + 1]
+                targetData[targetPos * 4 + 2] = sourceData[sourcePos * 4 + 2]
+                targetData[targetPos * 4 + 3] = sourceData[sourcePos * 4 + 3]
+            }
+        }
+        targetCtx.putImageData(targetImageData, 0, 0)
+    }
+
+    window.onload = function () {
+        renderSourceCanvas()
+        moveSourceImageDataToTargetCanvasByPixel(sourceCtx.getImageData(0, 0, 200, 200), 0, 0)
+        moveSourceImageDataToTargetCanvasByPixel(sourceCtx.getImageData(200, 0, 200, 200), 200, 0)
+        moveSourceImageDataToTargetCanvasByPixel(sourceCtx.getImageData(0, 200, 200, 200), 0, 200)
+        moveSourceImageDataToTargetCanvasByPixel(sourceCtx.getImageData(200, 200, 200, 200), 200, 200)
+    }
+</script>
+</body>
+</html>

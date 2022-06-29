@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<style>
+	*{margin:0 auto;padding:0;list-style: none}
+	.wrap{width:300px;height: 600px;text-align: center;}
+	.tab{margin-bottom: 20px}
+	.tab ul li{cursor: pointer;display: inline-block;background-image: url("images/menu2.gif");background-size: 90px 60px;; width:90px; line-height: 40px;background-repeat: no-repeat;color: white;border-radius: 7px;}
+	.content{width:300px;height: 540px;text-align: left;}
+	.tab-content{}
+	.tab-content ul li{margin-bottom: 10px;padding-left: 12px}
+	.tab-content ul li a{color:#315eb2;text-decoration: none}
+	.tab-content ul li a:hover{color:#315eb2;text-decoration:underline}
+	.show{display: block;}
+	.hide{display: none;}
+</style>
+</head>
+
+<body>
+	<div class="wrap">
+		<div class="tab">
+			<ul>
+				<li class="tab-title">小说</li>
+				<li class="tab-title">非小说</li>
+				<li class="tab-title">少儿</li>
+			</ul>
+		</div>
+		<div class="content">
+			<div class="tab-content">
+				<ul>
+					<li><a href="#">1.时间旅行者的妻子</a></li>
+					<li><a href="#">2.女心理师（下）</a></li>
+					<li><a href="#">3.鬼吹灯之精绝古城</a></li>
+					<li><a href="#">4.女心理师（上）</a></li>
+					<li><a href="#">5.小时候</a></li>
+					<li><a href="#">6.追风筝的人</a></li>
+					<li><a href="#">7.盗墓笔记2</a></li>
+					<li><a href="#">8.输赢</a></li>
+				</ul>
+			
+			</div>
+			<div class="tab-content">
+				<ul>
+					<li><a href="#">1.人生若只如初见</a></li>
+					<li><a href="#">2.高效能人士的七个..</a></li>
+					<li><a href="#">3.求医不如求己</a></li>
+					<li><a href="#">4.人体使用手册</a></li>
+					<li><a href="#">5.孩子，把你的手给我</a></li>
+					<li><a href="#">6.别笑！我是英文单词书</a></li>
+					<li><a href="#">7.体经络使用手册</a></li>
+					<li><a href="#">8.股市稳赚</a></li>
+				</ul>
+			</div>
+			<div class="tab-content">
+				<ul>
+					<li><a href="#">1.斯凯瑞金色童书?..</a></li>
+					<li><a href="#">2.哈利?波特与“混..</a></li>
+					<li><a href="#">3.不一样的卡梅拉（..</a></li>
+					<li><a href="#">4.它们是怎么来的</a></li>
+					<li><a href="#">5.五?三班的坏小子..</a></li>
+					<li><a href="#">6.男生日记</a></li>
+					<li><a href="#">7.哈利?波特与魔法石</a></li>
+					<li><a href="#">8.噼里啪啦丛书(全7册)</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		
+		var tab_titles=document.querySelectorAll(".tab-title");
+		console.log(tab_titles[0].indexOf)
+		var tab_content=document.querySelectorAll(".tab-content");
+		var len=tab_titles.length;
+		function removeBgImage(eles){
+			for(var i=0;i<eles.length;i++){
+				eles[i].style.backgroundImage="";
+				
+			}
+		}
+		function hideDiv(eles){
+			for(var i=0;i<eles.length;i++){
+				eles[i].style.display="none";	
+			}
+		}
+		for(var i=0;i<len;i++){
+			tab_titles[i].setAttribute("idx",i);
+			tab_titles[i].onclick=function(){
+				removeBgImage(tab_titles);
+				hideDiv(tab_content);
+				this.style.backgroundImage="url('images/menu1.gif')";
+				tab_content[this.getAttribute("idx")].style.display="block";	
+			}
+		}
+		tab_titles[0].style.backgroundImage="url('images/menu1.gif')";
+		hideDiv(tab_content);
+		tab_content[0].style.display="block";
+	</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        p {
+            position: relative;
+        }
+        label {
+            position: absolute;
+            left: 8px;
+            pointer-events: none;
+            transition: all 200ms;
+            top: 3px;
+            color: gray;
+            font-size: 14px;
+            background-color: white;
+        }
+        input:focus + label, input:not(:placeholder-shown) + label{
+            transform: translate(-10px, -10px) scale(.75) ;
+            
+        }
+    </style>
+</head>
+<body>
+    <p>
+        <input type="text" name="text" id="text" placeholder=" "><label>请输入你的姓名</label>
+    </p>
+    <p>
+        <input type="text" name="text" id="text" placeholder=" "><label>请输入你的地址</label>
+    </p>
+</body>
+</html>

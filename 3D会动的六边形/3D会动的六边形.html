@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D过渡轮播图</title>
+    <style type="text/css">
+        @keyframes rotate {
+            from {
+                transform: perspective(700px) rotateY(0);
+            }
+
+            to {
+                transform: perspective(700px) rotateY(-360deg);
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .wrapper {
+            transform-style: preserve-3d;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            text-align: center;
+            color: white;
+            line-height: 100px;
+        }
+
+        .anim {
+            animation-name: rotate;
+            animation-duration: 10s;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+        }
+
+        .wrapper div{
+            width:200px;
+            height: 100px;
+            position: absolute;
+            left: -100px;
+            top: -50px;
+            transform-origin: center;
+        }
+        .item1 {
+            transform: translateZ(250px);
+            background-color: rgb(255, 156, 156);
+        }
+        .item2 {
+            background-color: rgb(228, 213, 0);
+            transform: rotateY(60deg) translateZ(250px);
+        }
+        .item3 {
+            background-color: rgb(44, 223, 53);
+            transform: rotateY(120deg) translateZ(250px);
+        }
+        .item4 {
+            background-color: rgb(0, 202, 209);
+            transform: rotateY(180deg) translateZ(250px);
+        }
+        .item5 {
+            background-color: rgb(114, 135, 253);
+            transform: rotateY(240deg) translateZ(250px);
+        }
+        .item6 {
+            background-color: rgb(255, 88, 199);
+            transform: rotateY(300deg) translateZ(250px);
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="wrapper anim">
+        <div class="item1">1</div>
+        <div class="item2">2</div>
+        <div class="item3">3</div>
+        <div class="item4">4</div>
+        <div class="item5">5</div>
+        <div class="item6">6</div>
+    </div>
+</body>
+
+</html>

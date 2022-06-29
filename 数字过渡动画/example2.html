@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <p>
+        <input type="number" id="number" value="0"/>
+    </p>
+    <p>
+        数字过渡动画：
+        <span id="output">
+            点击“开始”按钮
+        </span>
+    </p>
+    <script src="./numberAnimate.js"></script>
+    <script>
+        const
+            number = document.getElementById('number'),
+            output = document.getElementById('output')
+        
+        let from = Number(number.value)
+            to = from
+        
+        number.oninput = function () {
+            from = to
+            to = Number(number.value)
+            numberAnimate({
+                from: from,
+                to: to,
+                progress: val => (output.innerHTML = val),
+                complete: () => (console.log('complete'))
+            })
+        }
+        
+    </script>
+</body>
+
+</html>

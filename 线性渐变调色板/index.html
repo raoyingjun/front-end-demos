@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{margin:0 auto;padding:0}
+        .wrap {
+            width:600px;height: 300px;
+            background-color: rgb(247, 247, 247);
+            margin-top: 10%;
+        }
+        .wrap>div {
+            float: left;
+        }
+        .square {
+            width:300px; height: 300px;
+            background-image: linear-gradient(90deg, #FF0000, #0000FF);
+        }
+        .panel {
+            width:150px;
+        }
+        input {box-sizing: border-box;}
+        input[type=text] {width:150px; height: 30px; }
+        input[type=button] {width:30px;height: 30px;}
+    </style>
+</head>
+<body>
+    <div class="wrap" id="wrap">
+        <div class="panel" id="panel-left">
+            <input type="text" id="color-left" value="#FF0000">
+        </div>
+        <div class="square" id="square"></div>
+        <div class="panel" id="panel-right">
+            <input type="text" id="color-right" value="#0000FF">
+        </div>
+    </div>
+    <script>
+        function randNum (min, max) {
+            return Math.floor(Math.random() * (max - min + 1) + min);
+        }
+        function randColor () {
+            let color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += colorArr[randNum(0, colorArr.length - 1)];
+            }
+            return color;
+        }
+        var wrap = document.querySelector('#wrap');
+        var square = document.querySelector('#square');
+        var leftColor = document.querySelector('#color-left');
+        var rightColor = document.querySelector('#color-right');
+        var leftPanel = document.querySelector('#panel-left');
+        var rightPanel = document.querySelector('#panel-right');
+        var leftColorValue =  '#FF0000',
+            rightColorValue = '#0000FF';
+        var reg = /#[a-fA-F0-9]{6}/;
+        var colorArr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F'];
+        leftColor.oninput = function () {
+            if (reg.test(this.value.trim())) {
+                leftColorValue = this.value.trim();
+                square.style.backgroundImage = 'linear-gradient(90deg, ' + leftColorValue + ', ' + rightColorValue + ')'
+            }
+        }
+        rightColor.oninput = function () {
+            if (reg.test(this.value.trim())) {
+                console.log('do if')
+                rightColorValue = this.value.trim();
+                square.style.backgroundImage = 'linear-gradient(90deg, ' + leftColorValue + ', ' + rightColorValue + ')';
+            }
+        }
+        for (var j = 0; j < 10; j++) {
+            let leftInput = document.createElement('input');
+            let leftRandColor = randColor();
+            leftInput.setAttribute('type', 'button');
+            leftInput.style.backgroundColor = leftRandColor;
+            leftInput.color = leftRandColor;
+            leftPanel.appendChild(leftInput);
+            let rightInput = document.createElement('input');
+            let rightRandColor = randColor();
+            rightInput.setAttribute('type', 'button');
+            rightInput.style.backgroundColor = rightRandColor;
+            rightInput.color = rightRandColor;
+            rightPanel.appendChild(rightInput);
+        }
+        leftPanel.onclick = function (e) {
+           if (e.target.type == 'button') {
+                leftColorValue = e.target.color;
+                leftColor.value = e.target.color;
+                square.style.backgroundImage = 'linear-gradient(90deg, ' + leftColorValue + ', ' + rightColorValue + ')';
+           }
+        }
+        rightPanel.onclick = function (e) {
+           if (e.target.type == 'button') {
+                rightColorValue = e.target.color;
+                rightColor.value = e.target.color;
+                square.style.backgroundImage = 'linear-gradient(90deg, ' + leftColorValue + ', ' + rightColorValue + ')';
+           }
+        }
+    </script>
+</body>
+</html>

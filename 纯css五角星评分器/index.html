@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {margin: 0; padding: 0;}
+        input {
+            position: absolute; 
+            width: 30px;
+            height: 50px; 
+            opacity: 0;
+            cursor: pointer;
+        }
+        label {
+            display: block;
+            float: left;
+            font-size:30px;
+            width: 30px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            color: rgb(255, 208, 0);
+            transition: all .5s;
+        }
+        .wrapper {
+            display: block;
+            margin: 100px auto;
+            width: 150px;
+            overflow: hidden;
+        }
+        input:checked~label {
+            color: rgba(255, 208, 0, .3);
+        }
+        input:checked+label {
+            color: rgb(255, 208, 0);
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <input type="radio" name="star">
+        <label>★</label>
+        <input type="radio" name="star">
+        <label>★</label>
+        <input type="radio" name="star">
+        <label>★</label>
+        <input type="radio" name="star">
+        <label>★</label>
+        <input type="radio" name="star">
+        <label>★</label>
+    </div>
+</body>
+</html>

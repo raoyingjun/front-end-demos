@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<style>
+*{margin:0 auto;padding:0}
+#wrap{width:360px;height:190px; background-color:skyblue;margin-top:100px;white-space:nowrap;font-size:0;position:relative;overflow:hidden;border-radius:5px}
+#wrap>div{position:absolute;}
+#wrap>div>div{display:inline-block;width:360px;height:190px;}
+#wrap>ul{transition: bottom .3s; position: absolute;left:50%;margin-left: -87.5px}
+#wrap>ul>li{width:12px;height: 12px;background-color: rgba(0,0,0,0.4);float: left;border-radius: 50%;margin:0 10px;cursor: pointer}
+#wrap>ul>li.highlight{background-color: rgba(0,0,0,0.8)}
+#left,#right{ position: absolute;width:30px;height: 60px;background-color: rgba(0,0,0,0.4);font-size: 16px;text-align: center;line-height: 60px;color: white;cursor: pointer}
+#left{transition:left .3s;left:0px;top:50%;margin-top:-30px}
+#right{transition:right .3s;right:0px;top:50%;margin-top:-30px}
+</style>
+</head>
+
+<body>
+<div id="wrap">
+	<div>
+    	<div><img src="images/5.gif" width="360" height="190" /></div>
+		<div><img src="images/1.gif" width="360" height="190" /></div>
+    	<div><img src="images/2.gif" width="360" height="190" /></div>
+   	 	<div><img src="images/3.jpg" width="360" height="190" /></div>
+   		<div><img src="images/4.jpg" width="360" height="190" /></div>
+   	 	<div><img src="images/5.gif" width="360" height="190" /></div>
+        <div><img src="images/1.gif" width="360" height="190" /></div>
+    </div>
+	<ul>
+		<li class="highlight"></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+	</ul>
+	<div id="left"><</div>
+	<div id="right">></div>
+</div>
+	<p style="text-align: center">无缝轮播（鼠标悬浮到图片上可操作）</p>
+<script>
+	var wrap=document.querySelector("#wrap");
+	var pics=wrap.children[0];
+	var left=document.querySelector("#left");
+	var right=document.querySelector("#right");
+	pics.style.left="-360px";
+	var divs=pics.children;
+	var length=divs.length;
+	var lis=wrap.children[1].children;
+	var width=360;
+	var height=190;
+	var timer=null;
+	var time=2000;
+	var index=0;
+	function removeClass(arr,cls){
+		for(var i=0;i<arr.length;i++){
+			arr[i].classList.remove(cls);
+		}
+	}
+	function getIndexByClass(arr,cls){
+		for(var i=0;i<arr.length;i++){
+			if(arr[i].classList.contains(cls)){
+				return i;
+			}
+		}
+	}
+	function getIndex(arr,obj){
+		for(var i=0;i<arr.length;i++){
+			if(arr[i]==obj)
+				return i;
+		}
+	}
+	function move(ele,left){
+
+		if(!ele&&left!=null&&left!="")
+			return;
+			var target=left;
+			var leader;
+			var step;;
+			ele.timer=setInterval(function(){
+				if(leader==target){
+					clearInterval(ele.timer);
+					ele.timer=null;
+				}
+				leader=ele.offsetLeft;
+				step=(target-leader)/10;
+				step=step>0?Math.ceil(step):Math.floor(step);
+				leader=leader+step;	
+				ele.style.left=leader+"px";	
+			},10);
+			
+	}
+	function play(){
+		timer=setInterval(function(){
+			
+			if(pics.offsetLeft==-width*(length-1))
+				pics.style.left=-width+"px";			
+			move(pics,pics.offsetLeft-width);
+			index++;
+			if(index>=length-2)
+				index=0;
+			removeClass(lis,"highlight");
+			lis[index].classList.add("highlight");
+		},time);
+	}
+	function stop(){
+		if(timer){
+			clearInterval(timer);
+			if(pics.timer)
+				return;
+				
+		}
+	}
+	left.style.left="-10%";
+	right.style.right="-10%";
+	wrap.children[1].style.bottom="-10%"
+	wrap.onmouseenter=function(){
+		stop();
+		wrap.children[1].style.bottom="10%";
+		left.style.left="0";
+		right.style.right="0";
+		
+	}
+	wrap.onmouseleave=function(){
+		play();
+		wrap.children[1].style.bottom="-10%";
+		left.style.left="-10%";
+		right.style.right="-10%";
+	}
+	left.onclick=function(){
+		if(pics.timer){
+			return;
+		}
+		move(pics,-width*index);
+		if(pics.offsetLeft==0)
+			pics.style.left=-width*(length-2)+"px";
+		if(pics.offsetLeft==-width*(length-1))
+			pics.style.left=-width+"px";
+		index--;
+		if(index<0)
+			index=length-3
+		removeClass(lis,"highlight");
+		lis[index].classList.add("highlight");
+	}
+	right.onclick=function(){
+		if(pics.timer){
+			return;
+		}
+		move(pics,-width*(index+2));
+		if(pics.offsetLeft==-width*(length-1))
+			pics.style.left=-width+"px";
+		if(pics.offsetLeft==0)
+			pics.style.left=-width*(length-2)+"px";
+		index++;
+		if(index>=length-2)
+			index=0;
+		removeClass(lis,"highlight");
+		lis[index].classList.add("highlight");
+	}
+	for(var i=0;i<lis.length;i++){
+		lis[i].onclick=function(){
+			if(pics.timer)
+				return;
+			var click_idx=getIndex(lis,this);	
+			var cur_idx=getIndexByClass(lis,"highlight");
+			if(click_idx==cur_idx){
+				return;
+			}else if(click_idx>cur_idx){
+				index=click_idx;
+				move(pics,-width*((index+1)));
+				removeClass(lis,"highlight")
+				lis[index].classList.add("highlight");
+			}else{
+				index=click_idx;
+				move(pics,-((index+1)*width));
+				removeClass(lis,"highlight")
+				lis[index].classList.add("highlight");
+			}
+		}
+	}
+	play();
+	document.addEventListener('visibilitychange', function() {
+		var isHidden = document.hidden;
+		if (isHidden) {
+			stop();	
+			console.log("hidden")
+		}else{
+			play();
+			console.log("show")
+		}
+	});
+</script>
+</body>
+</html>

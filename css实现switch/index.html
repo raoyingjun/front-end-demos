@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .switch {
+            width: 40px;
+            height: 20px;
+            position: relative;
+            background-color: rgb(219, 219, 219);
+            border-radius: 20px;
+            padding: 2px;
+            overflow: hidden;
+            transition: all .5s;
+        }
+
+        .switch-input {
+            display: block;
+            margin: 0;
+            width: 100%;
+            left: -1px;
+            top: -1px;
+            height: 100%;
+            opacity: 0;
+            position: absolute;
+        }
+
+        .switch-circle {
+            width: 20px;
+            height: 20px;
+            background-color: #ffffff;
+            display: block;
+            border-radius: 50%;
+            transition: all .5s;
+            pointer-events: none;
+            z-index: 100;
+            position: absolute;
+        }
+
+        .switch-background {
+            transition: all .5s;
+            background-color: transparent;
+            display: block;
+            position: absolute;
+            pointer-events: none;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            right: 0;
+        }
+
+        .switch-input:checked + .switch-circle {
+            transform: translateX(20px);
+        }
+
+        .switch-input:checked ~ .switch-background {
+            background-color: rgba(72, 104, 245, 0.89);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="switch">
+        <input type="checkbox" class="switch-input" />
+        <span class="switch-circle"></span>
+        <span class="switch-background"></span>
+    </div>
+    <br>
+    <div class="switch">
+        <input type="checkbox" class="switch-input" />
+        <span class="switch-circle"></span>
+        <span class="switch-background"></span>
+    </div>
+    <br>
+    <div class="switch">
+        <input type="checkbox" class="switch-input" />
+        <span class="switch-circle"></span>
+        <span class="switch-background"></span>
+    </div>
+</body>
+
+</html>

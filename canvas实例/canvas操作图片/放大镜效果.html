@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {margin: 0; padding: 0;}
+        canvas {
+            display: block; 
+            border: 1px solid gray; 
+            margin: 30px auto;
+            margin-bottom: 0;
+        }
+        input{
+            display: block;
+            margin: 20px auto;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="c" width="800" height="600"></canvas>
+    <script>
+        var c = document.querySelector('#c');
+        var ctx = c.getContext('2d');
+        var img = new Image();
+        var isMouseDown = false;
+        window.addEventListener('load', function (e) {
+            loadImg('./pic.png');
+        });
+        function loadImg (src) {
+            img.onload = function () {
+                ctx.drawImage(this, 0, 0)
+            }
+            img.src = src;
+        }
+        c.addEventListener('mousemove', function (e) {
+            if (isMouseDown) {
+                ctx.clearRect(0, 0, c.width, c.height);
+                ctx.drawImage(img, 0, 0);
+                var x = e.clientX - this.offsetLeft,
+                    y = e.clientY - this.offsetTop;
+                drawMagnifier(100, 2, x, y); 
+            }
+        });
+        c.addEventListener('mousedown', function (e) {
+            isMouseDown = true
+            if (isMouseDown) {
+                ctx.clearRect(0, 0, c.width, c.height);
+                ctx.drawImage(img, 0, 0);
+                var x = e.clientX - this.offsetLeft,
+                    y = e.clientY - this.offsetTop;
+                drawMagnifier(100, 2, x, y); 
+            }
+        });
+        c.addEventListener('mouseup', function () {
+            isMouseDown = false;
+            ctx.clearRect(0, 0, c.width, c.height);
+            ctx.drawImage(img, 0, 0);
+        });
+        c.addEventListener('mouseout', function () {
+            console.log('out')
+            isMouseDown = false;
+            ctx.clearRect(0, 0, c.width, c.height);
+            ctx.drawImage(img, 0, 0);
+        });
+        function drawMagnifier (r, scaleRate, dx, dy) {
+            var mC = document.createElement('canvas');
+            var mCtx = mC.getContext('2d');
+            mC.width = r * 2
+            mC.height = r * 2;
+            mCtx.fillStyle = 'white';
+            mCtx.fillRect(0, 0, mC.width, mC.height);
+            mCtx.drawImage(c, dx - r, dy - r, r * 2, r * 2, 0 - (mC.width * scaleRate - mC.width) / 2, 0 - (mC.height * scaleRate - mC.height) / 2, mC.width * scaleRate , mC.height * scaleRate);
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(dx, dy, r, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.clip();
+            ctx.drawImage(mC, 0, 0, mC.width, mC.height, dx - mC.width / 2, dy - mC.height / 2, mC.width, mC.height);
+            ctx.restore();
+        }
+    </script>
+</body>
+</html>

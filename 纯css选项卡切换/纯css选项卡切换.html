@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {margin: 0; padding: 0;}
+        .clearfix::after, .clearfix::before {
+            clear: both;
+            display: block;
+            content: ""
+        }
+        .tab-container {
+            width: 500px; 
+            height: 300px;
+            margin: 0 auto;
+            margin-top: 200px;
+        }
+        .tab-header {
+            height: 50px;
+            width: 100%;
+        }
+        .tab-header-item {
+            display: block;
+            float: left;
+            width: 33.33%;
+            height: 100%;
+            box-sizing: border-box;
+            border: 1px solid #E3E3E3;
+            border-bottom: none;
+            text-align: center;
+            line-height: 50px;
+            color: black;
+            text-decoration: none;
+        }
+        .tab-header-item + .tab-header-item {
+            border-left: none;
+        }
+        .tab-content {
+            height: 250px;
+            width: 100%;
+            border: 1px solid #E3E3E3;
+            box-sizing: border-box;
+        }
+        .tab-content-body {
+            display: none;
+            width: 100%;
+            padding: 50px;
+            box-sizing: border-box;
+            height: 100%;
+            text-indent: 4ch;
+        }
+        .tab-content-body:target {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="tab-container">
+        <div class="tab-header clearfix">
+            <a href="#content1" class="tab-header-item">HTML</a>
+            <a href="#content2" class="tab-header-item">CSS</a>
+            <a href="#content3" class="tab-header-item">JavaScript</a>
+        </div>
+        <div class="tab-content">
+            <div class="tab-content-body" id="content1">
+                HTML称为超文本标记语言，是一种标识性的语言。它包括一系
+                列标签．通过这些标签可以将网络上的文档格式统一，使分散的Inter
+                net资源连接为一个逻辑整体。HTML文本是由HTML命令组成的
+                描述性文本，HTML命令可以说明文字，图形、动画、声音、表格、链接等。
+            </div>
+            <div class="tab-content-body" id="content2">层叠样式表(英文全称：Cascading Style Sheets)是一种用
+                来表现HTML（标准通用标记语言的一个应用）或XML（标准通用标记语言的一个子
+                集）等文件样式的计算机语言。CSS不仅可以静态地修饰网页，还
+                可以配合各种脚本语言动态地对网页各元素进行格式化。
+            </div>
+            <div class="tab-content-body" id="content3">JavaScript（简称“JS”） 是一种具有函数优先
+                的轻量级，解释型或即时编译型的编程语言。虽然它是作为开发
+                Web页面的脚本语言而出名的，但是它也被用到了很多非浏览器环境中，J
+                avaScript 基于原型编程、多范式的动态脚本语言，并且支持面向对象、命令式和声明式（如函
+                数式编程）风格。
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .nav {
+            width: auto;
+            background-color: #444444;
+            overflow: auto;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .nav a {
+            color: white;
+            line-height: 58px;
+            margin: 0 18px;
+        }
+
+        .nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-bar {
+            position: absolute;
+            bottom: 0;
+            height: 5px;
+            background-color: rgb(87, 146, 255);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="nav">
+        <a href="#">主站</a>
+        <a href="#">番剧</a>
+        <a href="#">游戏中心</a>
+        <a href="#">直播</a>
+        <a href="#">会员购</a>
+        <a href="#">漫画</a>
+        <a href="#">赛事</a>
+        <a href="#">大会员</a>
+        <a href="#">消息</a>
+        <a href="#">动态</a>
+        <a href="#">收藏</a>
+        <a href="#">历史</a>
+        <a href="#">创作中心</a>
+        <div class="nav-bar"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/gh/jquery/jquery/dist/jquery.js"></script>
+    <script>
+        $(function () {
+            var nav = $('.nav')
+                .find('a')
+                .click(function () {
+                    var $nav = $('.nav');
+                    $('.nav-bar')
+                        .css({
+                            width: this.offsetWidth,
+                            left: this.offsetLeft
+                        });
+                    var scrollLeft = this.offsetLeft - ($nav[0].offsetWidth - this.offsetWidth) / 2;
+                    $nav
+                        .animate({
+                            scrollLeft: scrollLeft
+                        }, 200);
+                })
+                .eq(0)
+                .click()
+                .end()
+                .end()
+                .find('.nav-bar')
+                .css({
+                    transition: 'all .2s'
+                });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,43 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            margin: 50px;
+        }
+        .loading1 {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid red;
+            
+        }
+        .loading2 {
+            border: 3px solid red;
+            border-top: 3px solid #f3f3f3;
+        }
+        @keyframes rotate {
+            from {
+                transform: rotate(0)
+            }
+            to {
+                transform: rotate(360deg)
+            }
+        }
+        .rotate {
+            animation: rotate 1000ms infinite linear
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box loading1 rotate"></div>
+    <div class="box loading2 rotate"></div>
+</body>
+
+</html>

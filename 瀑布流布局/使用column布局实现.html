@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            column-count: 2;
+            column-gap: 0;
+            color: white
+        }
+
+        .box {
+            text-align: center;
+            /* 避免盒子折断 */
+            break-inside: avoid;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+
+</div>
+
+<script>
+    const container = document.getElementById('container')
+
+    function random(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min
+    }
+
+    function randomColor() {
+        let hexColor = '#'
+        for (let i = 0; i < 6; i++) {
+            hexColor += randomColor.colors[random(0, randomColor.colorsLength - 1)]
+        }
+        return hexColor
+    }
+
+    randomColor.colors = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
+    randomColor.colorsLength = randomColor.colors.length
+    for (let i = 0; i < 50; i++) {
+        const box = document.createElement('div')
+        box.classList.add('box')
+        box.innerHTML = 'item' + i
+        box.style.height = random(200, 300) + 'px'
+        box.style.lineHeight = box.style.height
+        box.style.backgroundColor = randomColor()
+        container.append(box)
+    }
+</script>
+</body>
+</html>

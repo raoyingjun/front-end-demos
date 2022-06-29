@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .list {
+            width: 800px;
+            height: 400px;
+            margin: 100px auto;
+            background-color: lightgray;
+        }
+        .list div {
+            width: calc(100% / 5);
+            height: 100%;
+            float: left;
+            transition: all .5s;
+        }
+        .list:active div{
+            width: calc(100% * (3 / 5) / 4);
+        }
+        .list div:active{
+            width: calc(100% * (2 / 5));
+        }
+    </style>
+</head>
+<body>
+    <div class="list">
+        <div style="background-color: rgb(255, 98, 70);"></div>
+        <div style="background-color: rgb(65, 106, 230);"></div>
+        <div style="background-color: rgb(255, 151, 66);"></div>
+        <div style="background-color: rgb(11, 211, 161);"></div>
+        <div style="background-color: rgb(221, 202, 27);"></div>
+    </div>
+</body>
+</html>

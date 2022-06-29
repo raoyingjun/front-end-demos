@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        @keyframes loading {
+            from {
+                transform: rotate(0)
+            }
+
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        canvas {
+            margin: 100px;
+            /* border: 1px solid gray; */
+            animation: loading 2s linear infinite;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" width="42" height="42">Unsopport canvas</canvas>
+    <script>
+        var canvas = document.getElementById('canvas')
+        var ctx = canvas.getContext('2d')
+        const FRAME_PER_PERCENTAGE = 0.03 // 每帧移动的多少个百分比
+        const FILL_STYLE = '#409EFF'
+        const LINE_WIDTH = 2
+        const RADIUS = canvas.width / 2 - LINE_WIDTH * 2
+        var percentage = 0
+        init()
+        function init() {
+            initStyle()
+            animate()
+        }
+        function initStyle() {
+            ctx.strokeStyle = FILL_STYLE
+            ctx.lineWidth = LINE_WIDTH
+        }
+        function buildLoading(percent) {
+            ctx.beginPath()
+            var from = Math.PI * .5 * percent
+            var to = Math.PI * 2 * percent
+            if (to > Math.PI * 2) {
+                to = Math.PI * 2
+                percentage += FRAME_PER_PERCENTAGE
+            }
+            if (from > Math.PI * 2) {
+                from = Math.PI * 2
+            }
+            if (from === to) {
+                percentage = 0
+            }
+            ctx.arc(canvas.width / 2, canvas.height / 2, RADIUS, from, to)
+        }
+        function drawLoading() {
+            ctx.stroke()
+        }
+        function clear() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+        }
+        function animate() {
+            clear()
+            buildLoading(percentage)
+            drawLoading()
+            percentage += FRAME_PER_PERCENTAGE
+            requestAnimationFrame(animate)
+        }
+    </script>
+</body>
+
+</html>

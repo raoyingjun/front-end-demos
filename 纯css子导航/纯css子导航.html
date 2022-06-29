@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .clearfix::after, .clearfix::before {
+            display: block;
+            content: "";
+            clear: both;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none
+        }
+        .nav {
+            margin: 200px auto;
+            width: 300px;
+            height: 30px;
+            text-align: center;
+        }
+        .nav > ul > li {
+            box-sizing: border-box;
+            float: left;
+            width: 100px;
+            height: 30px;
+            border: 1px solid #E3E3E3
+        }
+        .nav > ul > li + li {
+            border-left: none;
+        }
+        .nav > ul > li > input, .nav > ul > li > input + label + ul {
+            display: none;
+        }
+        .nav > ul > li > input + label {
+            cursor: pointer;
+        }
+        .nav > ul > li > input:checked + label + ul {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav clearfix">
+        <ul>
+            <li>
+                <input type="checkbox" id="radio1" />
+                <label for="radio1">选项一</label>
+                <ul>
+                    <li>子选项一</li>
+                    <li>子选项二</li>
+                    <li>子选项一</li>
+                    <li>子选项三</li>
+                </ul>
+            </li>
+            <li>
+                <input type="checkbox" id="radio2" />
+                <label for="radio2">选项二</label>
+                <ul>
+                    <li>子选项一</li>
+                    <li>子选项二</li>
+                    <li>子选项一</li>
+                    <li>子选项三</li>
+                </ul>
+            </li>
+            <li>
+                <input type="checkbox" id="radio3" />
+                <label for="radio3">选项三</label>
+                <ul>
+                    <li>子选项一</li>
+                    <li>子选项二</li>
+                    <li>子选项一</li>
+                    <li>子选项三</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

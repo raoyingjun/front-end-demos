@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @keyframes animBorder {
+            from {
+                background-position:
+                    0 0,
+                    /* 使用 box 的宽度而不是高度作为参数来确保垂直的动画和水平的动画速度一致 */
+                    calc(200px - 1px) 0,
+
+                    200px calc(100px - 1px),
+                    /* 使用 box 的宽度而不是高度作为参数来确保垂直的动画和水平的动画速度一致 */
+                    0 200px;
+            }
+
+            to {
+                background-position:
+                    200px 0,
+                    /* 使用 box 的宽度而不是高度作为参数来确保垂直的动画和水平的动画速度一致 */
+                    calc(200px - 1px) 200px,
+
+                    0 calc(100px - 1px),
+                    /* 使用 box 的宽度而不是高度作为参数来确保垂直的动画和水平的动画速度一致 */
+                    0 0;
+            }
+        }
+
+        input {
+            width: 0;
+            height: 0;
+        }
+
+        label {
+            user-select: none;
+            cursor: pointer;
+        }
+
+        label:hover {
+            color: rgb(70, 123, 236);
+        }
+
+        div {
+            margin: 50px auto;
+            width: 200px;
+            line-height: 100px;
+            text-align: center;
+        }
+
+        div:focus-within {
+            color: rgb(70, 123, 236);
+            background-image:
+                linear-gradient(to right, rgb(70, 123, 236) 0, rgb(70, 123, 236) 50%, transparent 50%, transparent 100%),
+                linear-gradient(to bottom, rgb(70, 123, 236) 0, rgb(70, 123, 236) 50%, transparent 50%, transparent 100%),
+                linear-gradient(to left, rgb(70, 123, 236) 0, rgb(70, 123, 236) 50%, transparent 50%, transparent 100%),
+                linear-gradient(to top, rgb(70, 123, 236) 0, rgb(70, 123, 236) 50%, transparent 50%, transparent 100%);
+            background-size:
+                10px 1px,
+                1px 10px,
+                10px 1px,
+                1px 10px;
+            background-repeat:
+                repeat-x,
+                repeat-y,
+                repeat-x,
+                repeat-y;
+            animation: animBorder 5s linear infinite;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <label for="a"><input type="radio" id="a" name="select" />select A</label>
+    </div>
+    <div>
+        <label for="b"><input type="radio" id="b" name="select" />select B</label>
+    </div>
+    <div>
+        <label for="c"><input type="radio" id="c" name="select" />select C</label>
+    </div>
+</body>
+
+</html>

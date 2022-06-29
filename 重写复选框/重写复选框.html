@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+	<style>
+		*{margin:0; padding: 0}
+		div{height:200px; border:1px solid #000000}
+		input+label{ 
+			width:18px; height: 18px; border-radius: 10%; display: inline-block; border: 2px solid black;vertical-align:middle; font-size:18px;
+		}
+		input+label:hover{
+			cursor: pointer;
+		}
+		input:checked+label::after{
+			content:"\2714";
+		}
+		input{display: none}
+		
+	</style>
+</head>
+<!--<script src="jquery-3.4.1.js"></script>-->
+<script>
+</script>
+<body>
+<div>
+	足球<input type="checkbox" id="football">
+	<label for="football"></label>
+	<input type="checkbox" id="swimming">
+	游泳<label for="swimming"></label>
+	<input type="checkbox" id="singing">
+	唱歌<label for="singing"></label>
+</div>
+</body>
+</html>

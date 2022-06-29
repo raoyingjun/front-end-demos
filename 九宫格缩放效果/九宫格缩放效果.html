@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        .list {
+            width: 600px;
+            height: 600px;
+            margin: 50px auto;
+            color: white;
+        }
+        .list div {
+            float: left;
+            width: calc(100% / 3);
+            height: calc(100% / 3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all .5s;
+            cursor: pointer;
+        }
+        .list div:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(73, 73, 73, 0.5);
+        }
+    </style>
+    <div class="list">
+        <div style="background-color: rgb(255, 98, 70);"></div>
+        <div style="background-color: rgb(65, 106, 230);"></div>
+        <div style="background-color: rgb(255, 151, 66);"></div>
+        <div style="background-color: rgb(11, 211, 161);"></div>
+        <div style="background-color: rgb(221, 202, 27);"></div>
+        <div style="background-color: rgb(225, 65, 65);"></div>
+        <div style="background-color: rgb(134, 66, 211);"></div>
+        <div style="background-color: rgb(221, 62, 160);"></div>
+        <div style="background-color: rgb(231, 29, 29);"></div>
+    </div>   
+</body>
+</html>

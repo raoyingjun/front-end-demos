@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {margin: 0; padding: 0;}
+        #overlay {
+            position: fixed;
+            left: 0; right: 0; top: 0; bottom: 0;
+            background-color:rgba(0, 0, 0, .5);
+            display: none;
+        }
+        #content {
+            width: 200px;
+            height: 200px;
+            background-color: white;
+            position: absolute;
+            left: calc(50% - 100px);
+            top: calc(50% - 100px);
+        }
+        #overlay:target {
+            display: block;
+        }
+        #content {
+            line-height: 200px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <a href="#overlay" id="open">打开遮罩</a>
+    <a id="overlay" href="#open">
+        <div id="content">点击任意处关闭</div>
+    </a>
+</body>
+</html>
