@@ -1,0 +1,106 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .m-24 {
+            margin: 24px
+        }
+
+        .planA ul {
+            list-style: none;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #e7e7e7 50%, white 50%);
+            width: fit-content;
+            border-radius: 8px;
+            border: 1px solid #e7e7e7;
+        }
+
+        .planA li {
+            float: left;
+            padding: 8px 16px;
+            background: #e7e7e7;
+            border-radius: 8px;
+        }
+
+        .planA .active {
+            background: white
+        }
+
+        .planB ul {
+            list-style: none;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #e7e7e7 50%, white 50%);
+            width: fit-content;
+            border: 1px solid #e7e7e7;
+        }
+
+        .planB li {
+            float: left;
+            padding: 8px 16px;
+            background: #e7e7e7;
+        }
+
+        .planB .active {
+            background: white;
+            position: relative;
+        }
+        .planB .active::before {
+            display: block;
+            content: "";
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            left: -10px;
+            bottom: 0;
+            background: radial-gradient(circle at 0 0,transparent 70%, white 70%);
+
+        }
+        .planB .active::after {
+            display: block;
+            content: "";
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            right: -10px;
+            bottom: 0;
+            background: radial-gradient(circle at 100% 0,transparent 70%, white 70%);
+        }
+    </style>
+</head>
+
+<body>
+    <section class="planA">
+        <p>
+            PlanA：通用性不强，属于投机取巧方案。局限于只有两个tab，而且无法套入过渡动画效果
+        </p>
+        <ul class="m-24 planA">
+            <li> 堂食 </li>
+            <li class="active"> 外带 </li>
+
+        </ul>
+    </section>
+    <section class="planB">
+        <p>
+            PlanB：通用性强。任意数量tab可用，可套入过渡动画效果
+        </p>
+        <ul class="m-24">
+            <li> 水果 </li>
+            <li class="active"> 甜点 </li>
+            <li> 面包 </li>
+            <li class="active"> 中餐 </li>
+            <li> 饮料 </li>
+            <li class="active"> 面食 </li>
+        </ul>
+    </section>
+</body>
+
+</html>
