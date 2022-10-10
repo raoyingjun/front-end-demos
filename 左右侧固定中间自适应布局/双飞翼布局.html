@@ -1,0 +1,75 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        header,
+        footer {
+            height: 68px;
+            background-color: gray;
+            clear: both;
+        }
+
+        main {
+            height: 400px;
+        }
+
+        .left,
+        .center,
+        .right {
+            float: left;
+            height: 100%;
+        }
+
+        .left {
+            background-color: red;
+            width: 200px;
+            margin-left: -100%;
+        }
+
+        .center {
+            background-color: green;
+            width: 100%;
+        }
+
+        .right {
+            width: 100px;
+            background-color: blue;
+            margin-left: -100px;
+        }
+
+        .content {
+            margin-left: 200px;
+            margin-right: 100px;
+            height: 100%;
+            /* 
+             * @desc 上面两行也可以写成：
+             * 
+             * @code padding-left: 200px;
+             *       padding-right: 100px;
+             * @desc 效果是一样的
+            */
+        }
+    </style>
+</head>
+
+<body>
+    <header>头部</header>
+    <main>
+        <div class="center">
+            <div class="content">
+                优点：实现左右侧固定，中间自适应；中间栏可以优先渲染；不同于圣杯布局，该方式不会导致布局错位；不必再进行 position 相关设置 
+                <br>
+                缺点：多嵌套了一层 DOM 结构 </div>
+            </div>
+        </div>
+        <div class="left">左区域</div>
+        <div class="right">右区域</div>
+    </main>
+    <footer>底部</footer>
+</body>
+
+</html>
