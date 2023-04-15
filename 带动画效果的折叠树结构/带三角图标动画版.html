@@ -1,0 +1,99 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            list-style-type: none;
+        }
+        .icon::before {
+            display: inline-block;
+            content: "▲";
+            transition: transform 400ms;
+            width: 16x;
+            line-height: 16px;
+            font-size: 14px;
+            text-align: center;
+        }
+        .icon-right.icon::before {
+            transform: rotate(90deg);
+        }
+        .icon-down.icon::before {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body>
+<ul class="treefy">
+    <li class="treefy-item">1-1</li>
+    <li class="treefy-item">
+        1-2
+        <ul class="treefy">
+            <li class="treefy-item">1-2-1</li>
+            <li class="treefy-item">
+                1-2-2
+                <ul class="treefy">
+                    <li class="treefy-item">1-2-2-1</li>
+                    <li class="treefy-item">1-2-2-2</li>
+                    <li class="treefy-item">1-2-2-3</li>
+                </ul>
+            </li>
+            <li class="treefy-item">1-2-3</li>
+        </ul>
+    </li>
+    <li class="treefy-item">1-3</li>
+    <li class="treefy-item">1-4</li>
+    <li class="treefy-item">
+        1-5
+        <ul class="treefy">
+            <li class="treefy-item">1-5-1</li>
+            <li class="treefy-item">1-5-2</li>
+            <li class="treefy-item">1-5-3</li>
+        </ul>
+    </li>
+
+</ul>
+<script>
+    function treefy() {
+        var treeItems = document.getElementsByClassName('treefy-item')
+        for (var i = 0, len = treeItems.length; i < len; i++) {
+            (function (i) {
+                var tree = treeItems[i]
+                var childTree = tree.getElementsByClassName('treefy')[0]
+                if (!childTree) return
+                var isOpened = true
+                var defaultDisplay = getComputedStyle(childTree).display
+                tree.classList.add('icon', 'icon-right')
+                tree.addEventListener('click', function (e) {
+                    if (childTree) {
+                        isOpened = !isOpened
+                        childTree.style.display = isOpened ? defaultDisplay : 'none'
+                        tree.classList.remove('icon-right', 'icon-down') 
+                        tree.classList.add(isOpened ? 'icon-down' : 'icon-right')
+                    }
+                    e.stopPropagation()
+                })
+            })(i)
+        }
+    }
+
+    /**
+     * 在父节点内最前端追加一个节点
+     * @param parentNode {Node}
+     * @param newNode {Node}
+     */
+    function prepend(parentNode, newNode) {
+        var firstChild = parentNode.firstChild
+        if (!firstChild) {
+            parentNode.appendChild(newNode)
+            return
+        }
+        parentNode.insertBefore(newNode, firstChild)
+    }
+
+    treefy()
+</script>
+</body>
+</html>

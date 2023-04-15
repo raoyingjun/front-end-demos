@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            list-style-type: none;
+        }
+    </style>
+</head>
+<body>
+<ul class="treefy">
+    <li class="treefy-item">1-1</li>
+    <li class="treefy-item">
+        1-2
+        <ul class="treefy">
+            <li class="treefy-item">1-2-1</li>
+            <li class="treefy-item">
+                1-2-2
+                <ul class="treefy">
+                    <li class="treefy-item">1-2-2-1</li>
+                    <li class="treefy-item">1-2-2-2</li>
+                    <li class="treefy-item">1-2-2-3</li>
+                </ul>
+            </li>
+            <li class="treefy-item">1-2-3</li>
+        </ul>
+    </li>
+    <li class="treefy-item">1-3</li>
+    <li class="treefy-item">1-4</li>
+    <li class="treefy-item">
+        1-5
+        <ul class="treefy">
+            <li class="treefy-item">1-5-1</li>
+            <li class="treefy-item">1-5-2</li>
+            <li class="treefy-item">1-5-3</li>
+        </ul>
+    </li>
+
+</ul>
+<script>
+    /**
+     * 将一个嵌套列表树化。可支持展开、收缩树
+     */
+    function treefy() {
+        var treeItems = document.getElementsByClassName('treefy-item')
+        for (var i = 0, len = treeItems.length; i < len; i++) {
+            (function (i) { // 使用闭包：利用闭包特性，记录每一个树节点的装填
+                var tree = treeItems[i]
+                var childTree = tree.getElementsByClassName('treefy')[0] // 获取子树：拿到当前节点的子树
+                if (!childTree) return // 没有子树：说明没有子节点、不需要做任何处理
+                var isOpened = true // 标志位：记录子树是否打开的状态
+                var defaultDisplay = getComputedStyle(childTree).display // 默认display方式：抓取元素的默认display值，打开树时赋给元素相应display样式属性
+                var spanIcon = document.createElement('span') // 创建span标签：利用span制作icon图标
+                spanIcon.innerHTML = '[➖]' // 默认icon值：为“-”符号，因为默认树是全部打开的状态
+                prepend(tree, spanIcon) // 追加icon：将icon追加到树当前节点的最前面，用作图标
+                tree.addEventListener('click', function (e) {
+                    if (childTree) { // 如果有子树：则执行操作，否则不执行
+                        isOpened = !isOpened // 标志位取反：原来是打开的-》切换到关闭；原来是关闭的-》切换到打开
+                        childTree.style.display = isOpened ? defaultDisplay : 'none' // 切换display显示：显示则使用元素原本默认的diplay值，否则使用'none'
+                        tree.firstChild.innerHTML = '[' + (isOpened ? '➖' : '➕') + ']' // 切换icon显示：显示则使用“-”，否则使用“+”
+                    }
+                    e.stopPropagation() // 防止冒泡给父辈元素：只在自身触发，不然默认也会触发父元素的事件处理，导致click操作不符合预期表现
+                })
+            })(i)
+        }
+    }
+
+    /**
+     * 在父节点内最前端追加一个节点
+     * @param parentNode {Node}
+     * @param newNode {Node}
+     */
+    function prepend(parentNode, newNode) {
+        var firstChild = parentNode.firstChild
+        if (!firstChild) {
+            parentNode.appendChild(newNode)
+            return
+        }
+        parentNode.insertBefore(newNode, firstChild)
+    }
+
+    treefy()
+</script>
+</body>
+</html>
