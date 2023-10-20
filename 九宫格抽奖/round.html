@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        :root {
+            --size: 300px
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .wrapper {
+            box-shadow: 0 0 50px #e2e2e2;
+            width: var(--size);
+            margin: auto;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: var(--size);
+        }
+
+        .wrapper-cell {
+            width: calc(var(--size) / 3);
+            text-align: center;
+            line-height: calc(var(--size) / 3);
+            cursor: default;
+            float: left;
+        }
+
+        .wrapper-cell.active {
+            background-color: #eaeaea;
+        }
+
+        .wrapper-cell-start {
+            background-color: orange;
+            color: #ffffff;
+            cursor: pointer;
+        }
+
+        .wrapper-cell-start:hover {
+            background-color: #e89800;
+        }
+
+        .wrapper-cell-start.active {
+            cursor: not-allowed;
+            background-color: #e89800;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper" id="wrapper">
+    <div class="wrapper-cell" data-index="1">水杯</div>
+    <div class="wrapper-cell" data-index="2">公仔</div>
+    <div class="wrapper-cell" data-index="3">笔记本</div>
+    <div class="wrapper-cell" data-index="8">充电宝</div>
+    <div class="wrapper-cell wrapper-cell-start" id="wrapper-cell-start" onclick="start()">开始</div>
+    <div class="wrapper-cell" data-index="4">蓝牙耳机</div>
+    <div class="wrapper-cell" data-index="7">剃须刀</div>
+    <div class="wrapper-cell" data-index="6">书包</div>
+    <div class="wrapper-cell" data-index="5">鼠标</div>
+</div>
+<script>
+    const wrapper = document.getElementById('wrapper')
+    const startBtn = document.getElementById('wrapper-cell-start')
+    const rewards = Array.prototype.slice.call(
+        document.querySelectorAll('div.wrapper-cell:not(.wrapper-cell-start)')
+    )
+    const len = rewards.length
+    sortRewardsByIndex()
+
+    /**
+     * 返回 min 到 max 之间的随机数
+     * @param {number} min
+     * @param {number} max
+     * @return {number}
+     */
+    function getRandomNumber(min, max) {
+        return Math.floor(min + Math.random() * (max - min + 1))
+    }
+
+    /**
+     * 返回一个随机的抽奖次数
+     * @return {number}
+     */
+    function randomSampleTimes() {
+        return getRandomNumber(20, 40)
+    }
+    /**
+     * 开始抽奖
+     */
+    function start() {
+        if (start.running) return
+        startBtn.classList.add('active')
+        start.running = true
+        let elapsedTimes = 0 // 已经运行了几次动画
+        const repeatTimes = randomSampleTimes() // 要重复运行几次动画
+        let speed = 500 // 默认的动画速度
+        animate()
+        /**
+         * 抽奖动画
+         */
+        function animate() {
+            /**
+             * 因为抽奖动画一般是：慢-快-慢
+             * 如果已运行的动画次数小于总共要重复运行次数的 2/3, 则加快动画速度。
+             * 否则开始递减速度，慢慢停止。
+             * 备注：为什么是 2/3，而不是在重复运行次数的 1/2 后开始递减速度。
+             * 因为 1/2 处就开始递减的话，动画会停的很慢，会等待较长时间。
+             * 抽奖者容易失去耐心，不利于用户体验。
+             */
+            if (elapsedTimes < repeatTimes * (2 / 3)) {
+                speed = speed - 40
+                speed = speed < 100 ? 100 : speed // 防止动画速度越来越快，造成闪烁过快。设个最小阈值
+            } else {
+                speed = speed + 40
+            }
+            removeAllRewardActive()
+            addRewardActive(elapsedTimes % len)
+            if (elapsedTimes++ === repeatTimes) {
+                startBtn.classList.remove('active')
+                start.running = false
+                return
+            }
+            setTimeout(animate, speed)
+        }
+    }
+
+    /**
+     * 移除所有奖品高亮状态
+     */
+    function removeAllRewardActive() {
+        for (let i = 0; i < len; i++) {
+            rewards[i].classList.remove('active')
+        }
+    }
+
+    /**
+     * 为奖品添加高亮状态
+     * @param {number} index
+     */
+    function addRewardActive(index) {
+        rewards[index].classList.add('active')
+    }
+
+    /**
+     * 重排奖励遍历顺序。按照 data-index 的顺序排序奖励
+     */
+    function sortRewardsByIndex() {
+        for (let i = 0; i < len - 1; i++) {
+            for (let j = 0; j < len - i - 1; j++) {
+                const cur = parseInt(rewards[j].dataset.index)
+                const next = parseInt(rewards[j + 1].dataset.index)
+                if (cur > next) {
+                    const tmp = rewards[j + 1]
+                    rewards[j + 1] = rewards[j]
+                    rewards[j] = tmp
+                }
+            }
+        }
+    }
+</script>
+</body>
+</html>
